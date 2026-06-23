@@ -1,7 +1,6 @@
 {
-  "last_updated": "2026-06-22",
-  "update_note": "Manual baseline — June 22, 2026. Auto-update script will overwrite automatable fields weekly.",
-
+  "last_updated": "2026-06-23",
+  "update_note": "Auto-updated 2026-06-23 01:31 UTC via GitHub Actions",
   "indicators": {
     "I1": {
       "name": "Coercion-Failure",
@@ -13,7 +12,8 @@
       "disconfirm": "Iran, Russia, or DPRK demonstrably alters core strategic behavior (not tactical compliance) in direct response to economic pressure within a 6-month window",
       "data_series": "CFR Sanctions Tracker; State Dept OFAC enforcement releases; UN Panel of Experts reports; FinCEN SAR filings",
       "update_method": "manual",
-      "source_credibility": "DOCUMENTED (Bolton memoir primary source; UN/FinCEN secondary)"
+      "source_credibility": "DOCUMENTED (Bolton memoir primary source; UN/FinCEN secondary)",
+      "last_reviewed": "2026-06-22"
     },
     "I2": {
       "name": "Reserve-Diversification",
@@ -41,7 +41,8 @@
       "disconfirm": "US/allied processing capacity reaches 40%+ of domestic demand for all 6 critical minerals; China lifts controls without extracting strategic concession",
       "data_series": "USGS Mineral Commodity Summaries (annual); DoD Critical Materials report; Census Bureau IM-145 import statistics",
       "update_method": "manual",
-      "source_credibility": "DOCUMENTED (USGS primary; DoD corroborated)"
+      "source_credibility": "DOCUMENTED (USGS primary; DoD corroborated)",
+      "last_reviewed": "2026-06-22"
     },
     "I4": {
       "name": "Indigenization",
@@ -53,7 +54,8 @@
       "disconfirm": "Chinese HBM at competitive yield rates within 12 months; US successfully restricts SK Hynix/Samsung sales to China",
       "data_series": "TrendForce semiconductor reports; SEMI equipment shipment data; BIS Entity List additions; CSET technology tracker",
       "update_method": "manual",
-      "source_credibility": "DOCUMENTED (TrendForce commercial data); CONTESTED (timeline estimates vary ±12 months)"
+      "source_credibility": "DOCUMENTED (TrendForce commercial data); CONTESTED (timeline estimates vary ±12 months)",
+      "last_reviewed": "2026-06-22"
     },
     "I5": {
       "name": "Entanglement-Seam",
@@ -65,7 +67,8 @@
       "disconfirm": "Hyperscaler capex redirects toward non-China-exposed supply chains; Musk divests Tesla China operations",
       "data_series": "SEC 10-K risk factor filings; earnings call transcripts; DoD contractor disclosures; SpaceX FCC orbital filings",
       "update_method": "manual",
-      "source_credibility": "DOCUMENTED (SEC filings); CONTESTED (entanglement scoring is a construct)"
+      "source_credibility": "DOCUMENTED (SEC filings); CONTESTED (entanglement scoring is a construct)",
+      "last_reviewed": "2026-06-22"
     },
     "I6": {
       "name": "Regionalization",
@@ -77,10 +80,10 @@
       "disconfirm": "mBridge adoption reverses; e-CNY growth stalls below $3T; GENIUS Act stablecoins fail to displace bank deposits",
       "data_series": "BIS payment statistics; mBridge public progress reports; PBoC e-CNY white papers; Treasury stablecoin reports",
       "update_method": "manual",
-      "source_credibility": "DOCUMENTED (BIS, PBoC primary); CONTESTED (mBridge figures self-reported)"
+      "source_credibility": "DOCUMENTED (BIS, PBoC primary); CONTESTED (mBridge figures self-reported)",
+      "last_reviewed": "2026-06-22"
     }
   },
-
   "ach": {
     "H1": {
       "name": "Managed Succession — Sino-centric",
@@ -107,21 +110,79 @@
       "description": "Not mutually exclusive with H1/H2/H3 — this is a process overlay. A disorderly transition episode (sovereign debt cascade, Taiwan contingency, dollar liquidity crisis) interrupts any of the above trajectories. Elevated by I1 trigger (coercion-failure increases miscalculation risk)."
     }
   },
-
   "key_datapoints": [
-    {"label": "USD share of allocated reserves", "value": "56.9%", "note": "Sub-57% first time since 1995 (IMF COFER Q3 2025)", "status": "watch"},
-    {"label": "Central bank gold purchases (2025)", "value": "~863t", "note": "4th consecutive year above 850t threshold", "status": "triggered"},
-    {"label": "Gold vs US Treasuries in official reserves", "value": "27% vs 22%", "note": "First inversion on record (ECB June 2026)", "status": "triggered"},
-    {"label": "e-CNY cumulative transactions", "value": ">$2.3T", "note": "230M+ wallets; reclassified as deposit liability Jan 2026", "status": "triggered"},
-    {"label": "mBridge settlement volume", "value": "$55B+", "note": "Multi-CBDC; bypasses SWIFT rails", "status": "triggered"},
-    {"label": "DPRK crypto theft (Jan–Apr 2026)", "value": "$577M", "note": "76% of all 2026 global crypto-hack losses", "status": "triggered"},
-    {"label": "US yttrium imports (Apr–Dec 2025)", "value": "333t → 17t", "note": "94.9% collapse; aerospace rationing confirmed", "status": "triggered"},
-    {"label": "China rare-earth processing share", "value": "~90%", "note": "Export controls active through Nov 10, 2026", "status": "triggered"},
-    {"label": "GENIUS Act stablecoin market growth", "value": "$200B → $309B", "note": "Jul–Nov 2025; ~$109B in T-bill compliance purchases", "status": "watch"},
-    {"label": "Hyperscaler 2026 capex (combined)", "value": "~$725B", "note": "Google ~$180B, Amazon ~$200B, Microsoft ~$190B, Meta ~$125B", "status": "watch"},
-    {"label": "Ukraine reconstruction estimate", "value": "~$588B", "note": "World Bank RDNA5, Feb 2026; ~3× Ukraine GDP", "status": "watch"},
-    {"label": "Chinese underground banking (FinCEN)", "value": "$1.4B", "note": "Suspicious fentanyl-related BSA filings 2025; Zhang network: 170+ accounts, 150+ companies", "status": "triggered"}
+    {
+      "label": "USD share of allocated reserves",
+      "value": "56.9%",
+      "note": "Sub-57% first time since 1995 (IMF COFER Q3 2025)",
+      "status": "watch"
+    },
+    {
+      "label": "Central bank gold purchases (2025)",
+      "value": "~863t",
+      "note": "4th consecutive year above 850t threshold",
+      "status": "triggered"
+    },
+    {
+      "label": "Gold vs US Treasuries in official reserves",
+      "value": "27% vs 22%",
+      "note": "First inversion on record (ECB June 2026)",
+      "status": "triggered"
+    },
+    {
+      "label": "e-CNY cumulative transactions",
+      "value": ">$2.3T",
+      "note": "230M+ wallets; reclassified as deposit liability Jan 2026",
+      "status": "triggered"
+    },
+    {
+      "label": "mBridge settlement volume",
+      "value": "$55B+",
+      "note": "Multi-CBDC; bypasses SWIFT rails",
+      "status": "triggered"
+    },
+    {
+      "label": "DPRK crypto theft (Jan–Apr 2026)",
+      "value": "$577M",
+      "note": "76% of all 2026 global crypto-hack losses",
+      "status": "triggered"
+    },
+    {
+      "label": "US yttrium imports (Apr–Dec 2025)",
+      "value": "333t → 17t",
+      "note": "94.9% collapse; aerospace rationing confirmed",
+      "status": "triggered"
+    },
+    {
+      "label": "China rare-earth processing share",
+      "value": "~90%",
+      "note": "Export controls active through Nov 10, 2026",
+      "status": "triggered"
+    },
+    {
+      "label": "GENIUS Act stablecoin market growth",
+      "value": "$200B → $309B",
+      "note": "Jul–Nov 2025; ~$109B in T-bill compliance purchases",
+      "status": "watch"
+    },
+    {
+      "label": "Hyperscaler 2026 capex (combined)",
+      "value": "~$725B",
+      "note": "Google ~$180B, Amazon ~$200B, Microsoft ~$190B, Meta ~$125B",
+      "status": "watch"
+    },
+    {
+      "label": "Ukraine reconstruction estimate",
+      "value": "~$588B",
+      "note": "World Bank RDNA5, Feb 2026; ~3× Ukraine GDP",
+      "status": "watch"
+    },
+    {
+      "label": "Chinese underground banking (FinCEN)",
+      "value": "$1.4B",
+      "note": "Suspicious fentanyl-related BSA filings 2025; Zhang network: 170+ accounts, 150+ companies",
+      "status": "triggered"
+    }
   ],
-
   "epistemic_note": "All probability ranges are analytical constructs, not measurements. TRIGGERED/PARTIAL/WATCH designations reflect threshold crossings against named data series — not predictive claims. This analysis is not investment advice. Claims labeled DOCUMENTED reflect primary/secondary source corroboration; CONTESTED reflects genuine scholarly disagreement; SPECULATIVE reflects framework extrapolation beyond available data."
 }
