@@ -1,0 +1,28 @@
+name: Update I1-I6 Indicators
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests python-dateutil
+      - env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: python update_indicators.py
+      - run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add data.json
+          git diff --cached --quiet || git commit -m "Weekly indicator update $(date -u '+%Y-%m-%d')"
+          git push
