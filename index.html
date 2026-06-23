@@ -83,6 +83,77 @@
     .chip-partial   { background: var(--partial-bg);   color: var(--partial);   border: 1px solid var(--partial); }
     .chip-watch     { background: var(--watch-bg);     color: var(--watch);     border: 1px solid var(--watch); }
 
+    /* ── Framework explainer panel ── */
+    .explainer-toggle {
+      width: 100%;
+      background: var(--surface);
+      border: none;
+      border-bottom: 1px solid var(--border);
+      padding: 11px 32px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+    }
+    .explainer-toggle:hover { background: var(--surface2); }
+    .explainer-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
+    .explainer-toggle.open .arrow { transform: rotate(90deg); }
+
+    .explainer-panel {
+      display: none;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 28px 32px;
+    }
+    .explainer-panel.open { display: block; }
+
+    .explainer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .explainer-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+    }
+    .explainer-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .explainer-card p {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .explainer-card p:last-child { margin-bottom: 0; }
+    .explainer-card .analogy {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      border-left: 2px solid var(--border);
+      padding-left: 10px;
+      margin-top: 8px;
+    }
+    .explainer-intro {
+      max-width: 780px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.8;
+    }
+    .explainer-intro strong { color: var(--accent); font-weight: 600; }
+
     /* ── Main layout ── */
     main { padding: 24px 32px; max-width: 1400px; }
 
@@ -318,6 +389,100 @@
   <span class="summary-chip chip-watch"     id="chip-watch">○ — WATCH</span>
 </div>
 
+<!-- ── Framework Guide Panel ── -->
+<button class="explainer-toggle" id="explainer-btn" onclick="toggleExplainer()">
+  <span class="arrow">▶</span> What is this framework? — Plain-English guide
+</button>
+<div class="explainer-panel" id="explainer-panel">
+
+  <div class="explainer-intro">
+    <p>This dashboard tracks a research framework called <strong>The Switch and the Vault</strong>. The big idea: the world's financial system is quietly splitting in two — a <strong>control layer</strong> (money governments can watch and freeze) and an <strong>exit layer</strong> (money that's harder to track or seize). Both sides are growing at the same time, and for the same reason.</p>
+    <p>The six indicators below (I1–I6) are early-warning signals for how far this split has gone. Here's what each part of the framework means in plain language.</p>
+  </div>
+
+  <div class="explainer-grid">
+
+    <div class="explainer-card">
+      <h3>🔀 The Switch</h3>
+      <p>The "Switch" is a new kind of money that governments can program. Think of it like a debit card that the government can freeze, limit, or track — but built into the currency itself.</p>
+      <p>Examples: China's digital yuan (e-CNY), which the government can restrict to certain stores or expire if not spent. Or the new U.S. stablecoin rules, which give the Treasury the power to freeze any stablecoin wallet.</p>
+      <div class="analogy">Analogy: Imagine your cash could only be spent at approved stores, and it expired in 30 days. That's what programmable money makes possible.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>🏦 The Vault</h3>
+      <p>The "Vault" is the opposite reaction. As governments build more control into money, countries, institutions, and individuals are moving wealth into things that are harder to seize — gold stored at home, Bitcoin, and off-the-books financial systems.</p>
+      <p>Example: France moved 129 tons of gold from the U.S. Federal Reserve back to Paris. India moved 274 tons home. They don't want someone else holding their savings.</p>
+      <div class="analogy">Analogy: If your bank could freeze your account anytime, you'd probably keep some cash at home. Countries are doing the same thing — at national scale.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>⚡ Why Both Are Happening at Once</h3>
+      <p>In 2022, the U.S. and Europe froze roughly $300 billion in Russian government assets after Russia invaded Ukraine. It was the largest financial seizure in history.</p>
+      <p>Every other country watched and thought: "That could happen to us." So they started building escape routes (the Vault) and, at the same time, the U.S. and allies doubled down on financial surveillance and control tools (the Switch).</p>
+      <div class="analogy">This is the core paradox: the more the control layer tightens, the more valuable the exit layer becomes — which justifies even tighter controls. It's a feedback loop.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>📊 Financial Strategic Depth (FSD)</h3>
+      <p>FSD is a score for how financially independent a country is. A country with high FSD can still function — pay for imports, run its military, keep businesses open — even if the U.S. and its allies try to cut it off economically.</p>
+      <p>It's calculated by looking at what a country has built up (its own payment systems, gold reserves, trade networks) versus how much pressure it faces (sanctions, market cutoffs, enforcement actions).</p>
+      <div class="analogy">Analogy: FSD is like asking "if all your neighbors stopped doing business with you, how long could you survive on what you've already built?" A high score means a long time.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>💀 Criminal Strategic Depth (CSD)</h3>
+      <p>CSD applies the same idea to illegal or sanctioned networks — drug cartels, North Korea's cyber theft operation, Iran's oil smuggling. How resilient are they under pressure?</p>
+      <p>A key finding: North Korea stole $577 million in cryptocurrency in the first four months of 2026. That's 76% of all crypto theft worldwide during that period. And they laundered it through the same Chinese banking networks used by Mexican drug cartels and Russian sanctions evaders — all at the same time.</p>
+      <div class="analogy">Analogy: It's as if the same set of laundromats were washing money for the mob, a drug cartel, and a foreign spy agency simultaneously. Shutting one down is complicated because you'd expose that you were watching all three.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>🏢 Corporate FSD Exposure</h3>
+      <p>This measures how much a company is at risk from U.S.-China tensions — and the surprising finding is that how much revenue a company makes in China tells you almost nothing about its actual risk.</p>
+      <p>Example: SpaceX makes nearly zero money in China. But it's still deeply exposed because its satellites compete directly with China's military satellites, its rockets need rare-earth magnets that China controls, and its owner (Elon Musk) also runs Tesla, which sells heavily in China. All of that creates leverage China could use.</p>
+      <div class="analogy">Analogy: You don't have to do business with someone for them to have power over you. If they control something you depend on — a key ingredient, a critical market — they have leverage regardless.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>🔄 The Imposition Paradox</h3>
+      <p>When you put economic pressure on a country, you expect it to back down. The paradox is that it often does the opposite — it gets stronger.</p>
+      <p>When the U.S. sanctioned China's semiconductor industry, China spent hundreds of billions building its own chip factories. When the U.S. froze Russia's reserves, Russia built payment networks that bypass the U.S. dollar entirely. The pressure created the very capability it was trying to prevent.</p>
+      <div class="analogy">Analogy: Squeezing a water balloon doesn't deflate it — it just moves the water somewhere else. Sanctions often work the same way.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>📈 The Great Repricing</h3>
+      <p>For 30 years (roughly 1990–2020), the world rewarded efficiency. Companies and countries got rich by specializing, cutting costs, and depending on global supply chains. Being lean was smart.</p>
+      <p>Now the world is rewarding resilience — the ability to survive disruption. Gold, domestic factories, backup supply chains, rare-earth stockpiles: things that look wasteful in peacetime are now seen as strategic assets. The market is repricing everything accordingly.</p>
+      <div class="analogy">Analogy: For decades, nobody kept a spare tire in their car because breakdowns were rare and tires are heavy. Then the roads got bad and everyone wanted a spare again. Same logic, applied to entire economies.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>⚖️ The Price of Slack</h3>
+      <p>"Slack" means spare capacity — backup suppliers, extra inventory, redundant systems. It's the opposite of efficiency. For decades, businesses and countries eliminated slack because it cost money and seemed wasteful.</p>
+      <p>COVID showed what happens without it: one factory in Malaysia shuts down and the entire global car industry stops because nobody kept spare chips. The "Price of Slack" is the framework for measuring when resilience is worth paying for — and how the cycle between efficiency and resilience repeats throughout history.</p>
+      <div class="analogy">Analogy: Running your car engine at maximum RPM is efficient — until it blows. Keeping a little slack in the engine extends its life. Economies work the same way, just on longer cycles.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>🎯 What the I1–I6 Indicators Measure</h3>
+      <p>The six indicators are early-warning signals that track whether the framework's core predictions are coming true in the real world. Each has a named data source and a specific threshold — so the board shows facts, not opinions.</p>
+      <p><strong>I1</strong> — Are sanctions actually changing anyone's behavior? <strong>I2</strong> — Are countries moving away from the U.S. dollar? <strong>I3</strong> — Is China using control of rare-earth minerals as a weapon? <strong>I4</strong> — Is China successfully building its own tech to replace foreign suppliers? <strong>I5</strong> — Are corporations getting dangerously entangled with geopolitical fault lines? <strong>I6</strong> — Are countries building financial systems that bypass the U.S.?</p>
+      <div class="analogy">Red = threshold crossed and confirmed. Yellow = partially triggered. Blue = watching but not yet at threshold.</div>
+    </div>
+
+    <div class="explainer-card">
+      <h3>🗂️ The ACH Table (H1–H4)</h3>
+      <p>ACH stands for Analysis of Competing Hypotheses — a structured way of asking "given everything we're seeing, which future is most likely?" Instead of picking one answer, it assigns probability ranges to four different scenarios.</p>
+      <p>The base case (H2, 55–70%) is "Bounded Multipolarity" — no single country wins, but the dollar loses its monopoly and the world splits into competing financial blocs. The tail risk (H4, 30–45%) is a messy, disorderly collapse of the current system rather than a managed transition.</p>
+      <div class="analogy">Think of it like a weather forecast that says "70% chance of rain, 30% chance of a thunderstorm." Both are possible. You plan for both.</div>
+    </div>
+
+  </div>
+</div>
+<!-- ── End Framework Guide Panel ── -->
+
 <main id="loading">Loading board data…</main>
 
 <footer id="epistemic-footer" style="display:none;"></footer>
@@ -469,6 +634,15 @@ async function render() {
 }
 
 render();
+
+function toggleExplainer() {
+  const btn   = document.getElementById('explainer-btn');
+  const panel = document.getElementById('explainer-panel');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.querySelector('.arrow').textContent = isOpen ? '▶' : '▼';
+}
 </script>
 </body>
 </html>
