@@ -3,24 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Switch & The Vault — Strategic Depth Board</title>
+  <title>The Switch & The Vault — Cody (2026)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg:         #0d1117;
-      --surface:    #161b22;
-      --surface2:   #21262d;
-      --border:     #30363d;
-      --text:       #e6edf3;
-      --muted:      #8b949e;
-      --triggered:  #f85149;
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface2:     #21262d;
+      --border:       #30363d;
+      --text:         #e6edf3;
+      --muted:        #8b949e;
+      --triggered:    #f85149;
       --triggered-bg: rgba(248,81,73,0.12);
-      --partial:    #d29922;
-      --partial-bg: rgba(210,153,34,0.12);
-      --watch:      #388bfd;
-      --watch-bg:   rgba(56,139,253,0.12);
-      --accent:     #58a6ff;
-      --base-case:  #3fb950;
-      --base-bg:    rgba(63,185,80,0.12);
+      --partial:      #d29922;
+      --partial-bg:   rgba(210,153,34,0.12);
+      --watch:        #388bfd;
+      --watch-bg:     rgba(56,139,253,0.12);
+      --accent:       #58a6ff;
+      --base-case:    #3fb950;
+      --base-bg:      rgba(63,185,80,0.12);
+      --gold:         #e3b341;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -52,23 +54,59 @@
       color: var(--muted);
       margin-top: 2px;
     }
+    .byline {
+      font-size: 12px;
+      color: var(--gold);
+      margin-top: 6px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+    .byline span { color: var(--muted); font-weight: 400; }
     .header-right {
       text-align: right;
       font-size: 12px;
       color: var(--muted);
     }
-    .header-right .updated {
+    .header-right .updated { font-weight: 600; color: var(--accent); }
+
+    /* ── Abstract ── */
+    .abstract-section {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 22px 32px;
+    }
+    .abstract-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .abstract-rq {
+      font-size: 14px;
       font-weight: 600;
       color: var(--accent);
+      margin-bottom: 10px;
+      line-height: 1.5;
+      font-style: italic;
     }
+    .abstract-body {
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.8;
+      max-width: 920px;
+    }
+    .abstract-body + .abstract-body { margin-top: 8px; }
 
-    /* ── Board summary bar ── */
+    /* ── Summary bar ── */
     .summary-bar {
       display: flex;
       gap: 8px;
       padding: 12px 32px;
       border-bottom: 1px solid var(--border);
       flex-wrap: wrap;
+      align-items: center;
     }
     .summary-chip {
       display: inline-flex;
@@ -82,9 +120,10 @@
     .chip-triggered { background: var(--triggered-bg); color: var(--triggered); border: 1px solid var(--triggered); }
     .chip-partial   { background: var(--partial-bg);   color: var(--partial);   border: 1px solid var(--partial); }
     .chip-watch     { background: var(--watch-bg);     color: var(--watch);     border: 1px solid var(--watch); }
+    .summary-version { font-size: 11px; color: var(--muted); margin-left: auto; }
 
-    /* ── Framework explainer panel ── */
-    .explainer-toggle {
+    /* ── Collapsible panels (shared) ── */
+    .panel-toggle {
       width: 100%;
       background: var(--surface);
       border: none;
@@ -100,18 +139,17 @@
       font-weight: 600;
       font-family: inherit;
     }
-    .explainer-toggle:hover { background: var(--surface2); }
-    .explainer-toggle .arrow { transition: transform 0.2s; font-size: 10px; }
-    .explainer-toggle.open .arrow { transform: rotate(90deg); }
-
-    .explainer-panel {
+    .panel-toggle:hover { background: var(--surface2); }
+    .panel-toggle .arrow { font-size: 10px; }
+    .collapsible-panel {
       display: none;
       background: var(--surface);
       border-bottom: 1px solid var(--border);
       padding: 28px 32px;
     }
-    .explainer-panel.open { display: block; }
+    .collapsible-panel.open { display: block; }
 
+    /* ── Explainer cards ── */
     .explainer-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -129,7 +167,6 @@
       font-weight: 700;
       color: var(--accent);
       margin-bottom: 8px;
-      letter-spacing: 0.02em;
     }
     .explainer-card p {
       font-size: 13px;
@@ -138,7 +175,7 @@
       margin-bottom: 8px;
     }
     .explainer-card p:last-child { margin-bottom: 0; }
-    .explainer-card .analogy {
+    .analogy {
       font-size: 12px;
       color: var(--muted);
       font-style: italic;
@@ -153,6 +190,84 @@
       line-height: 1.8;
     }
     .explainer-intro strong { color: var(--accent); font-weight: 600; }
+
+    /* ── Theoretical grounding cards ── */
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .theory-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 16px;
+    }
+    .theory-card h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .theory-card .citation {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 6px;
+    }
+    .theory-card p {
+      font-size: 12px;
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .theory-card .relation {
+      font-size: 11px;
+      color: var(--accent);
+      margin-top: 6px;
+      font-weight: 600;
+    }
+
+    /* ── Methodology cards ── */
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .method-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .method-card h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 8px;
+    }
+    .method-card p, .method-card li {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    .method-card ul { padding-left: 16px; }
+    .method-card li { margin-bottom: 3px; }
+    .method-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      margin-right: 4px;
+    }
+    .tag-doc  { background: var(--base-bg);      color: var(--base-case); }
+    .tag-con  { background: var(--partial-bg);   color: var(--partial); }
+    .tag-spec { background: var(--watch-bg);     color: var(--watch); }
 
     /* ── Main layout ── */
     main { padding: 24px 32px; max-width: 1400px; }
@@ -170,7 +285,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    /* ── Indicator cards grid ── */
+    /* ── Indicator cards ── */
     .indicators-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -181,29 +296,18 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 16px 18px;
-      position: relative;
     }
     .indicator-card.triggered { border-left: 3px solid var(--triggered); }
     .indicator-card.partial   { border-left: 3px solid var(--partial); }
     .indicator-card.watch     { border-left: 3px solid var(--watch); }
-
     .indicator-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       margin-bottom: 8px;
     }
-    .indicator-id {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-    .indicator-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
+    .indicator-id   { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 0.05em; }
+    .indicator-name { font-size: 14px; font-weight: 600; color: var(--text); }
     .status-badge {
       font-size: 10px;
       font-weight: 700;
@@ -215,139 +319,122 @@
     .badge-triggered { background: var(--triggered-bg); color: var(--triggered); }
     .badge-partial   { background: var(--partial-bg);   color: var(--partial); }
     .badge-watch     { background: var(--watch-bg);     color: var(--watch); }
-
-    .indicator-summary {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
-      font-style: italic;
-    }
-    .indicator-detail {
-      font-size: 13px;
-      color: var(--text);
-      margin-bottom: 12px;
-    }
-
-    .meta-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid var(--border);
-    }
-    .meta-item {
-      font-size: 11px;
-      color: var(--muted);
-    }
-    .meta-item strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-    .meta-item.cred {
-      color: var(--accent);
-      font-size: 10px;
-    }
-
-    /* expandable detail */
+    .indicator-summary { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic; }
+    .indicator-detail  { font-size: 13px; color: var(--text); margin-bottom: 12px; }
+    .meta-row { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .meta-item { font-size: 11px; color: var(--muted); }
+    .meta-item.cred { color: var(--accent); font-size: 10px; }
     details summary {
-      cursor: pointer;
-      font-size: 11px;
-      color: var(--accent);
-      margin-bottom: 4px;
-      user-select: none;
-      list-style: none;
+      cursor: pointer; font-size: 11px; color: var(--accent);
+      margin-bottom: 4px; user-select: none; list-style: none;
     }
     details summary::before { content: '▸ '; }
     details[open] summary::before { content: '▾ '; }
     details .expand-content {
-      background: var(--surface2);
-      border-radius: 6px;
-      padding: 10px 12px;
-      margin-top: 4px;
-      font-size: 12px;
-      color: var(--muted);
+      background: var(--surface2); border-radius: 6px;
+      padding: 10px 12px; margin-top: 4px; font-size: 12px; color: var(--muted);
     }
     details .expand-content .label {
-      font-weight: 600;
-      color: var(--text);
-      display: block;
-      margin-bottom: 2px;
-      margin-top: 6px;
+      font-weight: 600; color: var(--text); display: block;
+      margin-bottom: 2px; margin-top: 6px;
     }
     details .expand-content .label:first-child { margin-top: 0; }
 
-    /* ── ACH Table ── */
-    .ach-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 12px;
-    }
-    .ach-card {
+    /* ── ACH ── */
+    .ach-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .ach-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+    .ach-card.base { border-left: 3px solid var(--base-case); }
+    .ach-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+    .ach-id { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .ach-name { font-size: 13px; font-weight: 600; color: var(--text); margin: 2px 0 6px; }
+    .prob-badge { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+    .prob-unlikely { background: rgba(139,148,158,0.15); color: var(--muted); }
+    .prob-base     { background: var(--base-bg); color: var(--base-case); }
+    .prob-tail     { background: rgba(210,153,34,0.12); color: var(--partial); }
+    .ach-desc { font-size: 12px; color: var(--muted); }
+
+    /* ── Charts ── */
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 16px; }
+    .chart-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 14px 16px;
+      padding: 16px 18px;
     }
-    .ach-card.base { border-left: 3px solid var(--base-case); }
-    .ach-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 6px;
-    }
-    .ach-id { font-size: 11px; font-weight: 700; color: var(--muted); }
-    .ach-name { font-size: 13px; font-weight: 600; color: var(--text); margin: 2px 0 6px; }
-    .prob-badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 4px;
-      white-space: nowrap;
-    }
-    .prob-unlikely  { background: rgba(139,148,158,0.15); color: var(--muted); }
-    .prob-base      { background: var(--base-bg);         color: var(--base-case); }
-    .prob-tail      { background: rgba(210,153,34,0.12);  color: var(--partial); }
-    .ach-desc { font-size: 12px; color: var(--muted); }
+    .chart-card h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+    .chart-card .chart-sub { font-size: 11px; color: var(--muted); margin-bottom: 12px; }
 
     /* ── Key data points ── */
-    .datapoints-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+    .datapoints-table { width: 100%; border-collapse: collapse; }
     .datapoints-table th {
-      text-align: left;
-      padding: 8px 12px;
+      text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border);
+    }
+    .datapoints-table td { padding: 8px 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .datapoints-table tr:last-child td { border-bottom: none; }
+    .datapoints-table tr:hover td { background: var(--surface2); }
+    .dp-value { font-weight: 600; font-family: monospace; font-size: 13px; }
+    .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; }
+    .dot-triggered { background: var(--triggered); }
+    .dot-watch     { background: var(--watch); }
+    .dp-note { color: var(--muted); font-size: 12px; }
+    .dp-cite { font-size: 11px; color: var(--accent); }
+
+    /* ── Version history ── */
+    .version-table { width: 100%; border-collapse: collapse; }
+    .version-table th {
+      text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 700;
+      letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border);
+    }
+    .version-table td { padding: 8px 12px; font-size: 12px; border-bottom: 1px solid var(--border); }
+    .version-table tr:last-child td { border-bottom: none; }
+    .version-table tr:hover td { background: var(--surface2); }
+    .vs-t { color: var(--triggered); font-weight: 700; font-size: 10px; }
+    .vs-p { color: var(--partial);   font-weight: 700; font-size: 10px; }
+    .vs-w { color: var(--watch);     font-weight: 700; font-size: 10px; }
+
+    /* ── Bibliography ── */
+    .bib-section {
+      margin: 32px 32px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .bib-header {
+      background: var(--surface);
+      padding: 12px 18px;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
       border-bottom: 1px solid var(--border);
     }
-    .datapoints-table td {
-      padding: 8px 12px;
-      font-size: 13px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
+    .bib-body { padding: 16px 18px; }
+    .bib-group-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      margin-top: 16px;
     }
-    .datapoints-table tr:last-child td { border-bottom: none; }
-    .datapoints-table tr:hover td { background: var(--surface2); }
-    .dp-value { font-weight: 600; font-family: monospace; font-size: 13px; }
-    .dot {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 50%;
-      margin-right: 6px;
-      flex-shrink: 0;
+    .bib-group-label:first-child { margin-top: 0; }
+    .bib-entry {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--surface2);
     }
-    .dot-triggered { background: var(--triggered); }
-    .dot-watch     { background: var(--watch); }
-    .dp-note { color: var(--muted); font-size: 12px; }
+    .bib-entry:last-child { border-bottom: none; }
+    .bib-entry .bib-author { color: var(--text); font-weight: 600; }
+    .bib-entry .bib-num { color: var(--muted); font-size: 10px; margin-right: 8px; }
 
-    /* ── Footer / Epistemic note ── */
+    /* ── Footer ── */
     footer {
-      margin: 32px 32px 24px;
+      margin: 24px 32px 32px;
       padding: 14px 16px;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -357,24 +444,32 @@
       line-height: 1.7;
     }
     footer strong { color: var(--text); }
-
-    /* ── Loading/error ── */
-    #loading {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 300px;
-      color: var(--muted);
-      font-size: 13px;
+    .footer-credit {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 500;
     }
+    .footer-credit span { color: var(--muted); font-weight: 400; }
+
+    /* ── Loading ── */
+    #loading { display: flex; align-items: center; justify-content: center; height: 300px; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
 
+<!-- ════════════════════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════════════════ -->
 <header>
   <div class="header-left">
     <h1>The Switch &amp; The Vault — Strategic Depth Board</h1>
-    <div class="subtitle">I1–I6 Indicator Board · ACH Probability Matrix · Key Data Points</div>
+    <div class="subtitle">CSD / FSD Framework &nbsp;·&nbsp; I1–I6 Indicator Board &nbsp;·&nbsp; ACH Probability Matrix &nbsp;·&nbsp; Key Data Points</div>
+    <div class="byline">
+      Jeremy Cody &nbsp;·&nbsp; <span>Canonical CSD Author &nbsp;·&nbsp; INTV 498, University of Arizona &nbsp;·&nbsp; 2026</span>
+    </div>
   </div>
   <div class="header-right">
     <div>Last updated</div>
@@ -383,121 +478,269 @@
   </div>
 </header>
 
+<!-- ════════════════════════════════════════════════════════
+     ABSTRACT
+════════════════════════════════════════════════════════ -->
+<div class="abstract-section">
+  <div class="abstract-label">Abstract</div>
+  <div class="abstract-rq">
+    Research question: Under what conditions does financial coercion produce behavioral capitulation versus strategic indigenization — and what are the systemic consequences when it consistently produces the latter?
+  </div>
+  <p class="abstract-body">
+    This research program investigates a structural bifurcation in the international monetary system: the simultaneous expansion of programmable, surveillance-capable "control layer" instruments (central bank digital currencies, regulated stablecoins, multi-CBDC settlement platforms) and opaque, seizure-resistant "exit layer" assets (repatriated gold reserves, self-custody crypto, off-book state finance). The framework introduces two original analytical constructs — <strong>Financial Strategic Depth (FSD)</strong>, a resilience-over-constraint ratio for state-level monetary independence, and <strong>Criminal Strategic Depth (CSD)</strong>, its analog for illicit and sanctioned networks — and applies them to the post-2022 global monetary environment triggered by the ~$300B Russian sovereign asset freeze. Six operational indicators (I1–I6) track real-world threshold crossings against named primary data series, updated on a weekly cadence. Analysis of Competing Hypotheses (ACH) methodology assigns probability ranges to four structural outcome scenarios. The framework identifies a reflexive dynamic — the <strong>Imposition Paradox</strong> — in which coercion-failure systematically strengthens the capacity it targets. The site presents the live indicator board, underlying analytical framework, and theoretical grounding as of the current review period.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     SUMMARY BAR
+════════════════════════════════════════════════════════ -->
 <div class="summary-bar" id="summary-bar">
   <span class="summary-chip chip-triggered" id="chip-triggered">● — TRIGGERED</span>
   <span class="summary-chip chip-partial"   id="chip-partial">◐ — PARTIAL</span>
   <span class="summary-chip chip-watch"     id="chip-watch">○ — WATCH</span>
+  <span class="summary-version" id="board-version"></span>
 </div>
 
-<!-- ── Framework Guide Panel ── -->
-<button class="explainer-toggle" id="explainer-btn" onclick="toggleExplainer()">
-  <span class="arrow">▶</span> What is this framework? — Plain-English guide
+<!-- ════════════════════════════════════════════════════════
+     PANEL 1 — PLAIN-ENGLISH GUIDE
+════════════════════════════════════════════════════════ -->
+<button class="panel-toggle" id="guide-btn" onclick="togglePanel('guide')">
+  <span class="arrow" id="guide-arrow">▶</span> Framework guide — plain-English overview (9th-grade reading level)
 </button>
-<div class="explainer-panel" id="explainer-panel">
-
+<div class="collapsible-panel" id="guide-panel">
   <div class="explainer-intro">
     <p>This dashboard tracks a research framework called <strong>The Switch and the Vault</strong>. The big idea: the world's financial system is quietly splitting in two — a <strong>control layer</strong> (money governments can watch and freeze) and an <strong>exit layer</strong> (money that's harder to track or seize). Both sides are growing at the same time, and for the same reason.</p>
-    <p>The six indicators below (I1–I6) are early-warning signals for how far this split has gone. Here's what each part of the framework means in plain language.</p>
+    <p style="margin-top:8px;">The six indicators below (I1–I6) are early-warning signals for how far this split has gone. Here's what each part of the framework means in plain language.</p>
   </div>
-
   <div class="explainer-grid">
-
     <div class="explainer-card">
-      <h3>🔀 The Switch</h3>
-      <p>The "Switch" is a new kind of money that governments can program. Think of it like a debit card that the government can freeze, limit, or track — but built into the currency itself.</p>
-      <p>Examples: China's digital yuan (e-CNY), which the government can restrict to certain stores or expire if not spent. Or the new U.S. stablecoin rules, which give the Treasury the power to freeze any stablecoin wallet.</p>
-      <div class="analogy">Analogy: Imagine your cash could only be spent at approved stores, and it expired in 30 days. That's what programmable money makes possible.</div>
+      <h3>The Switch</h3>
+      <p>The "Switch" is a new kind of money that governments can program — like a debit card the government can freeze, limit, or track, but built into the currency itself.</p>
+      <p>Examples: China's digital yuan (e-CNY), which the government can restrict to certain stores or expire if not spent. The U.S. GENIUS Act stablecoins, which give Treasury the power to freeze any wallet.</p>
+      <div class="analogy">Analogy: Imagine your cash could only be spent at approved stores and expired in 30 days. That's what programmable money makes possible.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>🏦 The Vault</h3>
-      <p>The "Vault" is the opposite reaction. As governments build more control into money, countries, institutions, and individuals are moving wealth into things that are harder to seize — gold stored at home, Bitcoin, and off-the-books financial systems.</p>
+      <h3>The Vault</h3>
+      <p>The "Vault" is the opposite reaction. As governments build more control into money, countries are moving wealth into things harder to seize — gold stored at home, Bitcoin, and off-the-books financial systems.</p>
       <p>Example: France moved 129 tons of gold from the U.S. Federal Reserve back to Paris. India moved 274 tons home. They don't want someone else holding their savings.</p>
-      <div class="analogy">Analogy: If your bank could freeze your account anytime, you'd probably keep some cash at home. Countries are doing the same thing — at national scale.</div>
+      <div class="analogy">Analogy: If your bank could freeze your account anytime, you'd keep some cash at home. Countries are doing the same thing — at national scale.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>⚡ Why Both Are Happening at Once</h3>
-      <p>In 2022, the U.S. and Europe froze roughly $300 billion in Russian government assets after Russia invaded Ukraine. It was the largest financial seizure in history.</p>
-      <p>Every other country watched and thought: "That could happen to us." So they started building escape routes (the Vault) and, at the same time, the U.S. and allies doubled down on financial surveillance and control tools (the Switch).</p>
-      <div class="analogy">This is the core paradox: the more the control layer tightens, the more valuable the exit layer becomes — which justifies even tighter controls. It's a feedback loop.</div>
+      <h3>Why both are happening at once</h3>
+      <p>In 2022, the U.S. and Europe froze roughly $300 billion in Russian government assets — the largest financial seizure in history. Every other country watched and thought: "That could happen to us."</p>
+      <p>So they started building escape routes (the Vault) while the U.S. doubled down on financial control tools (the Switch).</p>
+      <div class="analogy">Core paradox: the more the control layer tightens, the more valuable the exit layer becomes — which justifies even tighter controls. It's a feedback loop.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>📊 Financial Strategic Depth (FSD)</h3>
-      <p>FSD is a score for how financially independent a country is. A country with high FSD can still function — pay for imports, run its military, keep businesses open — even if the U.S. and its allies try to cut it off economically.</p>
-      <p>It's calculated by looking at what a country has built up (its own payment systems, gold reserves, trade networks) versus how much pressure it faces (sanctions, market cutoffs, enforcement actions).</p>
-      <div class="analogy">Analogy: FSD is like asking "if all your neighbors stopped doing business with you, how long could you survive on what you've already built?" A high score means a long time.</div>
+      <h3>Financial Strategic Depth (FSD)</h3>
+      <p>FSD is a score for how financially independent a country is — how long it could function if the U.S. and allies tried to cut it off economically. It measures what a country has built (payment systems, gold reserves, trade networks) versus the pressure it faces (sanctions, market cutoffs).</p>
+      <div class="analogy">Analogy: "If all your neighbors stopped doing business with you, how long could you survive?" A high FSD score means a long time.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>💀 Criminal Strategic Depth (CSD)</h3>
-      <p>CSD applies the same idea to illegal or sanctioned networks — drug cartels, North Korea's cyber theft operation, Iran's oil smuggling. How resilient are they under pressure?</p>
-      <p>A key finding: North Korea stole $577 million in cryptocurrency in the first four months of 2026. That's 76% of all crypto theft worldwide during that period. And they laundered it through the same Chinese banking networks used by Mexican drug cartels and Russian sanctions evaders — all at the same time.</p>
-      <div class="analogy">Analogy: It's as if the same set of laundromats were washing money for the mob, a drug cartel, and a foreign spy agency simultaneously. Shutting one down is complicated because you'd expose that you were watching all three.</div>
+      <h3>Criminal Strategic Depth (CSD)</h3>
+      <p>CSD applies the same idea to illegal or sanctioned networks. Key finding: North Korea stole $577M in crypto in early 2026. They laundered it through the same Chinese banking networks used by Mexican drug cartels and Russian sanctions evaders — simultaneously. Attribution complexity is multiplicative, not additive.</p>
+      <div class="analogy">Analogy: The same laundromats washing money for the mob, a drug cartel, and a foreign spy agency at once. Shutting one down is complicated because you'd expose you were watching all three.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>🏢 Corporate FSD Exposure</h3>
-      <p>This measures how much a company is at risk from U.S.-China tensions — and the surprising finding is that how much revenue a company makes in China tells you almost nothing about its actual risk.</p>
-      <p>Example: SpaceX makes nearly zero money in China. But it's still deeply exposed because its satellites compete directly with China's military satellites, its rockets need rare-earth magnets that China controls, and its owner (Elon Musk) also runs Tesla, which sells heavily in China. All of that creates leverage China could use.</p>
-      <div class="analogy">Analogy: You don't have to do business with someone for them to have power over you. If they control something you depend on — a key ingredient, a critical market — they have leverage regardless.</div>
+      <h3>Corporate FSD Exposure</h3>
+      <p>This measures how much a company is at risk from U.S.-China tensions — and the surprising finding is that China revenue share tells you almost nothing about actual risk. SpaceX makes nearly zero money in China but has Very High exposure through satellite competition, rare-earth dependence, and principal capture via Musk/Tesla.</p>
+      <div class="analogy">Analogy: You don't have to do business with someone for them to have power over you. If they control something you depend on, they have leverage regardless.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>🔄 The Imposition Paradox</h3>
-      <p>When you put economic pressure on a country, you expect it to back down. The paradox is that it often does the opposite — it gets stronger.</p>
-      <p>When the U.S. sanctioned China's semiconductor industry, China spent hundreds of billions building its own chip factories. When the U.S. froze Russia's reserves, Russia built payment networks that bypass the U.S. dollar entirely. The pressure created the very capability it was trying to prevent.</p>
-      <div class="analogy">Analogy: Squeezing a water balloon doesn't deflate it — it just moves the water somewhere else. Sanctions often work the same way.</div>
+      <h3>The Imposition Paradox</h3>
+      <p>When you put economic pressure on a country, you expect it to back down. The paradox is that it often does the opposite. U.S. semiconductor sanctions pushed China to build its own chip industry. The Russian reserve freeze pushed countries worldwide to build dollar-bypass payment systems. Pressure created the very capability it was trying to prevent.</p>
+      <div class="analogy">Analogy: Squeezing a water balloon doesn't deflate it — it moves the water somewhere else.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>📈 The Great Repricing</h3>
-      <p>For 30 years (roughly 1990–2020), the world rewarded efficiency. Companies and countries got rich by specializing, cutting costs, and depending on global supply chains. Being lean was smart.</p>
-      <p>Now the world is rewarding resilience — the ability to survive disruption. Gold, domestic factories, backup supply chains, rare-earth stockpiles: things that look wasteful in peacetime are now seen as strategic assets. The market is repricing everything accordingly.</p>
-      <div class="analogy">Analogy: For decades, nobody kept a spare tire in their car because breakdowns were rare and tires are heavy. Then the roads got bad and everyone wanted a spare again. Same logic, applied to entire economies.</div>
+      <h3>The Great Repricing</h3>
+      <p>For 30 years, the world rewarded efficiency — cut costs, specialize, depend on global supply chains. Now the world is rewarding resilience. Gold, domestic factories, backup supply chains, rare-earth stockpiles: things that look wasteful in peacetime are now strategic assets. The market is repricing everything accordingly.</p>
+      <div class="analogy">Analogy: Nobody kept a spare tire because breakdowns were rare. Then the roads got bad and everyone wanted a spare again. Same logic, applied to entire economies.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>⚖️ The Price of Slack</h3>
-      <p>"Slack" means spare capacity — backup suppliers, extra inventory, redundant systems. It's the opposite of efficiency. For decades, businesses and countries eliminated slack because it cost money and seemed wasteful.</p>
-      <p>COVID showed what happens without it: one factory in Malaysia shuts down and the entire global car industry stops because nobody kept spare chips. The "Price of Slack" is the framework for measuring when resilience is worth paying for — and how the cycle between efficiency and resilience repeats throughout history.</p>
-      <div class="analogy">Analogy: Running your car engine at maximum RPM is efficient — until it blows. Keeping a little slack in the engine extends its life. Economies work the same way, just on longer cycles.</div>
+      <h3>The Price of Slack</h3>
+      <p>"Slack" means spare capacity — backup suppliers, extra inventory, redundant systems. For decades, businesses eliminated slack because it cost money. COVID showed what happens without it: one factory shutting down stopped the entire global car industry because nobody kept spare chips.</p>
+      <div class="analogy">Analogy: Running an engine at maximum RPM is efficient — until it blows. Keeping a little slack extends its life. Economies work the same way, on longer cycles.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>🎯 What the I1–I6 Indicators Measure</h3>
-      <p>The six indicators are early-warning signals that track whether the framework's core predictions are coming true in the real world. Each has a named data source and a specific threshold — so the board shows facts, not opinions.</p>
-      <p><strong>I1</strong> — Are sanctions actually changing anyone's behavior? <strong>I2</strong> — Are countries moving away from the U.S. dollar? <strong>I3</strong> — Is China using control of rare-earth minerals as a weapon? <strong>I4</strong> — Is China successfully building its own tech to replace foreign suppliers? <strong>I5</strong> — Are corporations getting dangerously entangled with geopolitical fault lines? <strong>I6</strong> — Are countries building financial systems that bypass the U.S.?</p>
-      <div class="analogy">Red = threshold crossed and confirmed. Yellow = partially triggered. Blue = watching but not yet at threshold.</div>
+      <h3>What the I1–I6 indicators measure</h3>
+      <p><strong>I1</strong> — Are sanctions changing anyone's behavior? <strong>I2</strong> — Are countries moving away from the dollar? <strong>I3</strong> — Is China weaponizing rare-earth control? <strong>I4</strong> — Is China building its own tech? <strong>I5</strong> — Are corporations getting dangerously entangled with geopolitical fault lines? <strong>I6</strong> — Are countries building financial systems that bypass the U.S.?</p>
+      <div class="analogy">Red = threshold crossed. Amber = partially triggered. Blue = watching, not yet at threshold.</div>
     </div>
-
     <div class="explainer-card">
-      <h3>🗂️ The ACH Table (H1–H4)</h3>
-      <p>ACH stands for Analysis of Competing Hypotheses — a structured way of asking "given everything we're seeing, which future is most likely?" Instead of picking one answer, it assigns probability ranges to four different scenarios.</p>
-      <p>The base case (H2, 55–70%) is "Bounded Multipolarity" — no single country wins, but the dollar loses its monopoly and the world splits into competing financial blocs. The tail risk (H4, 30–45%) is a messy, disorderly collapse of the current system rather than a managed transition.</p>
-      <div class="analogy">Think of it like a weather forecast that says "70% chance of rain, 30% chance of a thunderstorm." Both are possible. You plan for both.</div>
+      <h3>The ACH table (H1–H4)</h3>
+      <p>ACH (Analysis of Competing Hypotheses) is a structured method that assigns probability ranges to four different future scenarios rather than picking one answer. The base case (H2, 55–70%) is "Bounded Multipolarity" — no single winner, the dollar loses its monopoly, and the world splits into competing financial blocs.</p>
+      <div class="analogy">Like a weather forecast: "70% chance of rain, 30% chance of a thunderstorm." Both are possible. You plan for both.</div>
     </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PANEL 2 — THEORETICAL GROUNDING
+════════════════════════════════════════════════════════ -->
+<button class="panel-toggle" id="theory-btn" onclick="togglePanel('theory')">
+  <span class="arrow" id="theory-arrow">▶</span> Theoretical grounding — relationship to existing literature
+</button>
+<div class="collapsible-panel" id="theory-panel">
+  <p style="font-size:13px; color:var(--muted); max-width:820px; margin-bottom:4px;">The CSD/FSD framework builds on, extends, and in several cases departs from the following bodies of scholarship. Where the framework departs from prior work, the departure is the analytical contribution.</p>
+  <div class="theory-grid">
+    <div class="theory-card">
+      <h3>Hirschman — Exit, Voice, and Loyalty</h3>
+      <div class="citation">Hirschman, A.O. (1970). Exit, Voice, and Loyalty. Harvard University Press.</div>
+      <p>Provides the foundational behavioral mechanism for the Imposition Paradox. Hirschman predicts that actors facing coercion exercise exit (find alternatives) or voice (negotiate), not simply capitulate. The CSD/FSD framework operationalizes this as a measurable ratio: when exit capacity (FSD numerator) grows faster than pressure (denominator), coercion fails.</p>
+      <div class="relation">Framework relationship: BUILDS ON — formalizes Hirschman's qualitative prediction as a quantitative resilience ratio.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Farrell &amp; Newman — Weaponized Interdependence</h3>
+      <div class="citation">Farrell, H. &amp; Newman, A. (2019). Weaponized Interdependence. International Security, 44(1).</div>
+      <p>Establishes that states weaponize hub positions in global networks (financial, informational) to coerce periphery actors. The CSD/FSD framework extends this to the corporate level (Corporate FSD Exposure) and adds the critical finding that exposure is orthogonal to revenue geography — a company can be deeply exposed without any direct network position in the target country.</p>
+      <div class="relation">Framework relationship: EXTENDS — adds corporate-level measurement and the orthogonality finding not present in Farrell/Newman.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Kindleberger — Hegemonic Stability Theory</h3>
+      <div class="citation">Kindleberger, C. (1973). The World in Depression 1929–1939. University of California Press.</div>
+      <p>Predicts that the international monetary system requires a single hegemon to provide liquidity and enforce rules. The H2 base case (Bounded Multipolarity) is a direct challenge to Kindleberger's prediction — the framework argues the system can persist in a multipolar configuration, though with higher friction and tail risk.</p>
+      <div class="relation">Framework relationship: DEPARTS — H2 base case explicitly argues against Kindleberger's single-hegemon necessity claim.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Pozsar — Multipolar Money</h3>
+      <div class="citation">Pozsar, Z. (2022–2023). Global Money Notes. Credit Suisse / Ex Uno Plures.</div>
+      <p>Pozsar identifies Bretton Woods III — a commodity-backed multipolar reserve system emerging from the 2022 shock — as the successor to the dollar-credit system. The Switch and Vault framework is broadly consistent with Pozsar's monetary architecture diagnosis, while adding the reflexive control-vs-exit dynamic and the CSD/FSD operational measurement layer that Pozsar's framework lacks.</p>
+      <div class="relation">Framework relationship: CONSISTENT WITH — adds operational indicators and the reflexive feedback mechanism.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Arrighi — Long Twentieth Century</h3>
+      <div class="citation">Arrighi, G. (1994). The Long Twentieth Century. Verso.</div>
+      <p>Documents successive hegemon cycles (Genoa → Netherlands → Britain → United States), each characterized by a signal crisis (financialization, overextension) followed by terminal crisis and handoff. The framework's Historical Lineage thesis draws directly on Arrighi's cycle structure, extending it to the current transition with the 2022 reserve freeze as the potential signal crisis event.</p>
+      <div class="relation">Framework relationship: BUILDS ON — applies Arrighi's cycle structure to current events with specific falsification criteria.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Minsky — Financial Fragility</h3>
+      <div class="citation">Minsky, H. (1982). Can "It" Happen Again? M.E. Sharpe.</div>
+      <p>Minsky's financial instability hypothesis — that stability breeds instability as actors take on increasing risk during calm periods — directly underpins the Price of Slack framework. The 1990–2020 globalization era is characterized as a Minsky-style "short-volatility carry trade": selling redundancy (slack) and collecting efficiency gains until realized volatility exceeded the premium.</p>
+      <div class="relation">Framework relationship: BUILDS ON — Price of Slack formalizes Minsky's instability mechanism in a resilience/efficiency context.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Polanyi — The Great Transformation</h3>
+      <div class="citation">Polanyi, K. (1944). The Great Transformation. Farrar &amp; Rinehart.</div>
+      <p>Polanyi's "double movement" — market expansion generating a self-protective counter-movement — maps directly onto the Switch/Vault dynamic. The exit-layer flight (gold repatriation, CBDC alternatives, crypto self-custody) is precisely the Polanyian self-protection response to the market's overreach into monetary sovereignty. The framework operationalizes when the counter-movement reaches critical mass.</p>
+      <div class="relation">Framework relationship: BUILDS ON — operationalizes Polanyi's double movement with named data thresholds.</div>
+    </div>
+    <div class="theory-card">
+      <h3>Attali — Succession of Dominant Cores</h3>
+      <div class="citation">Attali, J. (2009). A Brief History of the Future. Arcade Publishing.</div>
+      <p>Attali documents successive dominant mercantile/financial cores (Bruges → Venice → Antwerp → Genoa → Amsterdam → London → New York), each bankrupted by military overextension and replaced by the next core. Provides mainstream-credentialed independent corroboration of the framework's cyclicality claim — the same mechanism arrived at independently across completely different scholarly traditions.</p>
+      <div class="relation">Framework relationship: CORROBORATES — independent convergence on cyclicality from a mainstream policy-adjacent source.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     PANEL 3 — METHODOLOGY
+════════════════════════════════════════════════════════ -->
+<button class="panel-toggle" id="method-btn" onclick="togglePanel('method')">
+  <span class="arrow" id="method-arrow">▶</span> Methodology — indicator construction, ACH scoring, epistemic discipline
+</button>
+<div class="collapsible-panel" id="method-panel">
+  <div class="method-grid">
+    <div class="method-card">
+      <h3>I1–I6 Indicator Construction</h3>
+      <p>Each indicator is constructed with four required components: (1) a named primary data series, (2) a mechanical trigger threshold, (3) a disconfirm condition specifying what would falsify the trigger, and (4) an update cadence and method (auto-fetch or manual review). Thresholds were set to be minimally sufficient — the weakest evidence consistent with the claim — not maximally demanding. Indicators are binary (TRIGGERED/PARTIAL/WATCH), not continuous scores, to prevent false precision.</p>
+    </div>
+    <div class="method-card">
+      <h3>Epistemic Labeling Protocol</h3>
+      <p>All load-bearing claims carry one of three labels:</p>
+      <ul>
+        <li><span class="method-tag tag-doc">DOCUMENTED</span> Primary or corroborated secondary source; claim would survive peer review scrutiny.</li>
+        <li><span class="method-tag tag-con">CONTESTED</span> Genuine scholarly disagreement exists; the claim reflects a reasonable interpretation, not consensus.</li>
+        <li><span class="method-tag tag-spec">SPECULATIVE</span> Framework extrapolation beyond available data; directionally plausible but not yet evidenced.</li>
+      </ul>
+      <p style="margin-top:8px;">Conspiratorial or banking-cabal framing is quarantined as belief-psychology evidence only — never used as a causal mechanism.</p>
+    </div>
+    <div class="method-card">
+      <h3>ACH Probability Scoring</h3>
+      <p>Analysis of Competing Hypotheses (ACH) follows the IC analytic standards methodology. Probability ranges (not point estimates) reflect genuine uncertainty. Scoring criteria: consistency of each hypothesis with all triggered indicators, plausibility of the causal chain, and the number of load-bearing assumptions required. H2 (Bounded Multipolarity) has the highest probability range because it requires the fewest auxiliary assumptions — it is the residual after ruling out cleaner outcomes. H4 is a tail overlay, not mutually exclusive with H1–H3.</p>
+    </div>
+    <div class="method-card">
+      <h3>Falsification Standards</h3>
+      <p>The framework is designed to be falsifiable. Each indicator has a named disconfirm condition. The framework as a whole would be falsified if: (a) USD reserve share rebounds above 63% in two consecutive COFER quarters; (b) central-bank gold purchases fall below 400t/year; (c) Iran, Russia, or DPRK demonstrably alters strategic behavior in direct response to economic pressure within a 6-month window. None of these conditions have been met as of the current review period.</p>
+    </div>
+    <div class="method-card">
+      <h3>Update Cadence</h3>
+      <p>Automatable indicators (I2 — IMF COFER, FRED gold/dollar series) update weekly via GitHub Actions. Manual indicators (I1, I3, I4, I5, I6) require human review before update — edit manual_overrides.json, commit, and trigger workflow. Version history is maintained in data.json and displayed in the Version History section below. The board is not a predictive model; it is a structured observation system. All readings reflect the state at the date displayed.</p>
+    </div>
+    <div class="method-card">
+      <h3>CSD/FSD Formula Notes</h3>
+      <p>FSD = (αP + βC + γG + δT + I<sub>par</sub>) / ((S + E + M) · Φ) where numerator terms are payments sovereignty (P), credit substitution (C), governance substitution (G), technological indigenization (T), and parallel channels (I<sub>par</sub>); denominator terms are sanctions (S), enforcement (E), market dependency (M), multiplied by bidirectional friction Φ ∈ (0,1]. FSD > 1 indicates the system preserves function faster than pressure degrades it. All α/β/γ/δ weights are analytical constructs, not empirically calibrated measurements — false precision is explicitly disclaimed.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     MAIN — INDICATOR BOARD, CHARTS, ACH, DATA, VERSION HISTORY
+════════════════════════════════════════════════════════ -->
+<main id="loading">Loading board data…</main>
+
+<!-- ════════════════════════════════════════════════════════
+     BIBLIOGRAPHY
+════════════════════════════════════════════════════════ -->
+<div class="bib-section">
+  <div class="bib-header">Bibliography &amp; Primary Sources</div>
+  <div class="bib-body">
+
+    <div class="bib-group-label">Theoretical Foundations</div>
+    <div class="bib-entry"><span class="bib-num">[1]</span><span class="bib-author">Arrighi, G.</span> (1994). <em>The Long Twentieth Century: Money, Power, and the Origins of Our Times.</em> Verso.</div>
+    <div class="bib-entry"><span class="bib-num">[2]</span><span class="bib-author">Attali, J.</span> (2009). <em>A Brief History of the Future.</em> Arcade Publishing.</div>
+    <div class="bib-entry"><span class="bib-num">[3]</span><span class="bib-author">Farrell, H. &amp; Newman, A.</span> (2019). Weaponized Interdependence: How Global Economic Networks Shape State Coercion. <em>International Security, 44</em>(1), 42–79.</div>
+    <div class="bib-entry"><span class="bib-num">[4]</span><span class="bib-author">Hirschman, A.O.</span> (1970). <em>Exit, Voice, and Loyalty: Responses to Decline in Firms, Organizations, and States.</em> Harvard University Press.</div>
+    <div class="bib-entry"><span class="bib-num">[5]</span><span class="bib-author">Kindleberger, C.</span> (1973). <em>The World in Depression 1929–1939.</em> University of California Press.</div>
+    <div class="bib-entry"><span class="bib-num">[6]</span><span class="bib-author">Minsky, H.</span> (1982). <em>Can "It" Happen Again? Essays on Instability and Finance.</em> M.E. Sharpe.</div>
+    <div class="bib-entry"><span class="bib-num">[7]</span><span class="bib-author">Polanyi, K.</span> (1944). <em>The Great Transformation: The Political and Economic Origins of Our Time.</em> Farrar &amp; Rinehart.</div>
+    <div class="bib-entry"><span class="bib-num">[8]</span><span class="bib-author">Pozsar, Z.</span> (2022–2023). Global Money Notes. Credit Suisse / Ex Uno Plures. Various issues.</div>
+
+    <div class="bib-group-label">Geopolitics &amp; Strategic Studies</div>
+    <div class="bib-entry"><span class="bib-num">[9]</span><span class="bib-author">Bolton, J.</span> (2020). <em>The Room Where It Happened: A White House Memoir.</em> Simon &amp; Schuster. [Primary source on sanctions-as-coercion-of-choice in 2018–2019 U.S. policy.]</div>
+    <div class="bib-entry"><span class="bib-num">[10]</span><span class="bib-author">Meadows, D. et al.</span> (1972). <em>The Limits to Growth.</em> Club of Rome / Universe Books. [Systems-dynamics corroboration of Price of Slack cyclicality thesis.]</div>
+
+    <div class="bib-group-label">Primary Data Sources (I1–I6)</div>
+    <div class="bib-entry"><span class="bib-num">[11]</span><span class="bib-author">IMF.</span> Currency Composition of Official Foreign Exchange Reserves (COFER). Quarterly. <em>data.imf.org.</em> [I2 — USD reserve share]</div>
+    <div class="bib-entry"><span class="bib-num">[12]</span><span class="bib-author">World Gold Council.</span> Central Bank Gold Statistics. Monthly. <em>gold.org.</em> [I2 — gold accumulation]</div>
+    <div class="bib-entry"><span class="bib-num">[13]</span><span class="bib-author">USGS.</span> Mineral Commodity Summaries. Annual. U.S. Department of the Interior. [I3 — rare earth processing share]</div>
+    <div class="bib-entry"><span class="bib-num">[14]</span><span class="bib-author">FinCEN.</span> Bank Secrecy Act / Suspicious Activity Reports. U.S. Treasury. [I1 — coercion failure; CSD shared-service-layer finding; $1.4B fentanyl-related filings]</div>
+    <div class="bib-entry"><span class="bib-num">[15]</span><span class="bib-author">UN Panel of Experts on DPRK.</span> Annual Reports to the Security Council. United Nations. [I1 — DPRK behavioral non-capitulation; $577M crypto theft figures]</div>
+    <div class="bib-entry"><span class="bib-num">[16]</span><span class="bib-author">Chainalysis.</span> (2026). Crypto Crime Report. Chainalysis Inc. [CSD — DPRK Lazarus Group attribution; THORChain laundering topology]</div>
+    <div class="bib-entry"><span class="bib-num">[17]</span><span class="bib-author">PBoC.</span> e-CNY Progress Report. People's Bank of China. Various. [I6 — e-CNY transaction volumes, wallet counts, legal reclassification]</div>
+    <div class="bib-entry"><span class="bib-num">[18]</span><span class="bib-author">BIS.</span> mBridge Progress Reports. Bank for International Settlements / mBridge Consortium. [I6 — multi-CBDC settlement volumes]</div>
+    <div class="bib-entry"><span class="bib-num">[19]</span><span class="bib-author">U.S. Treasury.</span> GENIUS Act Stablecoin Market Reports. 2025–2026. [I6 — stablecoin market growth, T-bill compliance purchases]</div>
+    <div class="bib-entry"><span class="bib-num">[20]</span><span class="bib-author">FRED / Federal Reserve Bank of St. Louis.</span> GOLDAMGBD228NLBM (gold price); DTWEXBGS (dollar index). <em>fred.stlouisfed.org.</em> [I2 — auto-updated]</div>
+    <div class="bib-entry"><span class="bib-num">[21]</span><span class="bib-author">World Bank.</span> (2026, February). Ukraine Rapid Damage and Needs Assessment 5 (RDNA5). [DRVC Nexus — $588B reconstruction estimate]</div>
+    <div class="bib-entry"><span class="bib-num">[22]</span><span class="bib-author">TrendForce.</span> Semiconductor Industry Reports. Commercial data. [I4 — HBM indigenization timeline estimates]</div>
 
   </div>
 </div>
-<!-- ── End Framework Guide Panel ── -->
 
-<main id="loading">Loading board data…</main>
-
-<footer id="epistemic-footer" style="display:none;"></footer>
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer id="epistemic-footer">
+  <strong>Epistemic note:</strong> All probability ranges are analytical constructs, not measurements. TRIGGERED/PARTIAL/WATCH designations reflect threshold crossings against named data series — not predictive claims. This analysis is not investment advice. Claims labeled DOCUMENTED reflect primary/secondary source corroboration; CONTESTED reflects genuine scholarly disagreement; SPECULATIVE reflects framework extrapolation beyond available data.
+  <div class="footer-credit">
+    Jeremy Cody &nbsp;·&nbsp; Canonical Author, Criminal Strategic Depth (CSD) Framework &nbsp;·&nbsp;
+    <span>INTV 498, University of Arizona, 2026 &nbsp;·&nbsp; All original constructs (CSD, FSD, Corporate FSD Exposure, The Switch and the Vault, The Imposition Paradox, The Great Repricing, The Price of Slack) developed by Jeremy Cody. Not investment advice.</span>
+  </div>
+</footer>
 
 <script>
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
-function statusClass(s) {
-  return s === 'TRIGGERED' ? 'triggered' : s === 'PARTIAL' ? 'partial' : 'watch';
-}
-function badgeClass(s) {
-  return s === 'TRIGGERED' ? 'badge-triggered' : s === 'PARTIAL' ? 'badge-partial' : 'badge-watch';
+function statusClass(s) { return s==='TRIGGERED'?'triggered':s==='PARTIAL'?'partial':'watch'; }
+function badgeClass(s)  { return s==='TRIGGERED'?'badge-triggered':s==='PARTIAL'?'badge-partial':'badge-watch'; }
+function probClass(dir) {
+  if (dir==='BASE CASE') return 'prob-base';
+  if (dir==='TAIL OVERLAY') return 'prob-tail';
+  return 'prob-unlikely';
 }
 
-// ── Indicator card builder ─────────────────────────────────────────────────
+// ── Card builders ────────────────────────────────────────────────────────────
 
 function buildIndicatorCard(id, ind) {
   const sc = statusClass(ind.status);
@@ -518,7 +761,7 @@ function buildIndicatorCard(id, ind) {
           <span class="label">Trigger threshold</span>${ind.threshold}
           <span class="label">Disconfirm condition</span>${ind.disconfirm}
           <span class="label">Data series</span>${ind.data_series}
-          <span class="label">Update method</span>${ind.update_method === 'auto' ? '⚡ Auto-fetched by update script' : '✎ Manual override required'}
+          <span class="label">Update method</span>${ind.update_method==='auto'?'⚡ Auto-fetched (GitHub Actions weekly)':'✎ Manual review — edit manual_overrides.json'}
         </div>
       </details>
       <div class="meta-row">
@@ -527,18 +770,10 @@ function buildIndicatorCard(id, ind) {
     </div>`;
 }
 
-// ── ACH card builder ───────────────────────────────────────────────────────
-
-function probClass(dir) {
-  if (dir === 'BASE CASE') return 'prob-base';
-  if (dir === 'TAIL OVERLAY') return 'prob-tail';
-  return 'prob-unlikely';
-}
-
 function buildAchCard(id, h) {
-  const isBase = h.direction === 'BASE CASE';
+  const isBase = h.direction==='BASE CASE';
   return `
-    <div class="ach-card ${isBase ? 'base' : ''}">
+    <div class="ach-card ${isBase?'base':''}">
       <div class="ach-header">
         <div>
           <div class="ach-id">${id}</div>
@@ -553,95 +788,235 @@ function buildAchCard(id, h) {
     </div>`;
 }
 
-// ── Data point row builder ─────────────────────────────────────────────────
-
 function buildDpRow(dp) {
-  const dotCls = dp.status === 'triggered' ? 'dot-triggered' : 'dot-watch';
+  const dotCls = dp.status==='triggered'?'dot-triggered':'dot-watch';
+  const cite = dp.citation ? `<span class="dp-cite">[${dp.citation}]</span>` : '';
   return `
     <tr>
       <td><span class="dot ${dotCls}"></span>${dp.label}</td>
       <td><span class="dp-value">${dp.value}</span></td>
-      <td class="dp-note">${dp.note}</td>
+      <td class="dp-note">${dp.note} ${cite}</td>
     </tr>`;
 }
 
-// ── Main render ────────────────────────────────────────────────────────────
+function buildVersionRow(v) {
+  function badge(s) {
+    if (s==='TRIGGERED') return `<span class="vs-t">T</span>`;
+    if (s==='PARTIAL')   return `<span class="vs-p">P</span>`;
+    return `<span class="vs-w">W</span>`;
+  }
+  return `
+    <tr>
+      <td style="color:var(--muted);font-family:monospace;">${v.date}</td>
+      <td style="color:var(--accent);">${v.version}</td>
+      <td>${badge(v.I1)}</td>
+      <td>${badge(v.I2)}</td>
+      <td>${badge(v.I3)}</td>
+      <td>${badge(v.I4)}</td>
+      <td>${badge(v.I5)}</td>
+      <td>${badge(v.I6)}</td>
+      <td style="color:var(--triggered);font-weight:700;">${v.triggered_count}</td>
+      <td style="color:var(--muted);font-size:11px;max-width:260px;">${v.note}</td>
+    </tr>`;
+}
+
+// ── Charts ────────────────────────────────────────────────────────────────────
+
+function buildCharts() {
+  const gridHtml = `
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h4>USD share of allocated reserves</h4>
+        <div class="chart-sub">IMF COFER — quarterly, 2020–2026 (%) · I2 trigger threshold: &lt;60%</div>
+        <canvas id="chart-usd" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>Central bank gold purchases</h4>
+        <div class="chart-sub">World Gold Council — annual tonnes, 2019–2025 · I2 trigger threshold: &gt;500t/yr for 2+ years</div>
+        <canvas id="chart-gold" height="160"></canvas>
+      </div>
+      <div class="chart-card">
+        <h4>ACH probability ranges</h4>
+        <div class="chart-sub">Analyst assessment — ranges reflect genuine uncertainty, not point estimates</div>
+        <canvas id="chart-ach" height="160"></canvas>
+      </div>
+    </div>`;
+  return gridHtml;
+}
+
+function renderCharts() {
+  const gridOpts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
+  const tickColor = '#8b949e';
+  const gridColor = 'rgba(48,54,61,0.5)';
+
+  Chart.defaults.color = tickColor;
+  Chart.defaults.borderColor = gridColor;
+
+  // USD reserve share
+  new Chart(document.getElementById('chart-usd'), {
+    type: 'line',
+    data: {
+      labels: ['Q1 2020','Q3 2020','Q1 2021','Q3 2021','Q1 2022','Q3 2022','Q1 2023','Q3 2023','Q1 2024','Q3 2024','Q1 2025','Q3 2025'],
+      datasets: [{
+        data: [62.0, 61.1, 60.1, 59.6, 58.9, 59.2, 58.1, 57.8, 58.4, 57.5, 57.8, 56.9],
+        borderColor: '#388bfd',
+        backgroundColor: 'rgba(56,139,253,0.08)',
+        tension: 0.35,
+        fill: true,
+        pointRadius: 3,
+      }, {
+        data: Array(12).fill(60),
+        borderColor: '#f85149',
+        borderDash: [4,3],
+        borderWidth: 1,
+        pointRadius: 0,
+        label: 'Trigger threshold (60%)',
+      }]
+    },
+    options: { ...gridOpts,
+      scales: {
+        y: { min: 54, max: 64, ticks: { callback: v => v+'%' }, grid: { color: gridColor } },
+        x: { ticks: { maxRotation: 45 }, grid: { display: false } }
+      },
+      plugins: { legend: { display: true, labels: { color: tickColor, font: { size: 10 }, boxWidth: 12 } } }
+    }
+  });
+
+  // Gold purchases
+  new Chart(document.getElementById('chart-gold'), {
+    type: 'bar',
+    data: {
+      labels: ['2019','2020','2021','2022','2023','2024','2025'],
+      datasets: [{
+        data: [668, 272, 450, 1082, 1037, 1045, 863],
+        backgroundColor: ctx => ctx.parsed.y >= 500 ? '#e3b341' : '#30363d',
+        borderWidth: 0,
+      }, {
+        data: Array(7).fill(500),
+        type: 'line',
+        borderColor: '#f85149',
+        borderDash: [4,3],
+        borderWidth: 1,
+        pointRadius: 0,
+        label: 'Trigger threshold (500t)',
+      }]
+    },
+    options: { ...gridOpts,
+      scales: {
+        y: { ticks: { callback: v => v+'t' }, grid: { color: gridColor } },
+        x: { grid: { display: false } }
+      },
+      plugins: { legend: { display: true, labels: { color: tickColor, font: { size: 10 }, boxWidth: 12 } } }
+    }
+  });
+
+  // ACH ranges
+  new Chart(document.getElementById('chart-ach'), {
+    type: 'bar',
+    data: {
+      labels: ['H1 Sino-centric succession','H2 Bounded multipolarity','H3 Persistent US primacy','H4 Disorderly restructuring'],
+      datasets: [
+        { label: 'Low', data: [15, 55, 20, 30], backgroundColor: 'transparent', borderWidth: 0 },
+        { label: 'Range', data: [15, 15, 15, 15], backgroundColor: ['#30363d','#3fb950','#30363d','#d29922'], borderWidth: 0 }
+      ]
+    },
+    options: { ...gridOpts,
+      indexAxis: 'y',
+      scales: {
+        x: { stacked: true, min: 0, max: 100, ticks: { callback: v => v+'%' }, grid: { color: gridColor } },
+        y: { stacked: true, ticks: { font: { size: 10 } }, grid: { display: false } }
+      },
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.datasetIndex===1 ? `${ctx.parsed.x}% range` : '' } }
+      }
+    }
+  });
+}
+
+// ── Main render ───────────────────────────────────────────────────────────────
 
 async function render() {
   let data;
   try {
     const resp = await fetch('data.json?_=' + Date.now());
     data = await resp.json();
-  } catch (e) {
+  } catch(e) {
     document.getElementById('loading').innerHTML =
       '<span style="color:var(--triggered)">⚠ Could not load data.json — make sure it is in the same folder as index.html.</span>';
     return;
   }
 
-  // Header
   document.getElementById('last-updated').textContent = data.last_updated || '—';
-  if (data.update_note) {
-    document.getElementById('update-note').textContent = data.update_note;
-  }
+  if (data.update_note) document.getElementById('update-note').textContent = data.update_note;
 
-  // Summary bar counts
   const indicators = data.indicators;
-  const counts = { TRIGGERED: 0, PARTIAL: 0, WATCH: 0 };
-  Object.values(indicators).forEach(i => counts[i.status] = (counts[i.status] || 0) + 1);
+  const counts = { TRIGGERED:0, PARTIAL:0, WATCH:0 };
+  Object.values(indicators).forEach(i => counts[i.status] = (counts[i.status]||0)+1);
   document.getElementById('chip-triggered').textContent = `● ${counts.TRIGGERED} TRIGGERED`;
   document.getElementById('chip-partial').textContent   = `◐ ${counts.PARTIAL} PARTIAL`;
   document.getElementById('chip-watch').textContent     = `○ ${counts.WATCH} WATCH`;
 
-  // Build main content
+  const latest = data.version_history ? data.version_history[0] : null;
+  if (latest) document.getElementById('board-version').textContent = latest.version + ' — ' + latest.date;
+
   const main = document.getElementById('loading');
   main.id = 'main-content';
   main.removeAttribute('style');
 
-  // Indicator grid
-  let html = `<div class="section-heading">Indicator Board — I1–I6</div>`;
+  let html = '';
+
+  // Indicator board
+  html += `<div class="section-heading">Indicator Board — I1–I6</div>`;
   html += `<div class="indicators-grid">`;
-  Object.entries(indicators).forEach(([id, ind]) => {
-    html += buildIndicatorCard(id, ind);
-  });
+  Object.entries(indicators).forEach(([id, ind]) => { html += buildIndicatorCard(id, ind); });
   html += `</div>`;
 
-  // ACH table
+  // Data visualizations
+  html += `<div class="section-heading" style="margin-top:32px;">Data Visualizations — Key Metrics</div>`;
+  html += buildCharts();
+
+  // ACH
   html += `<div class="section-heading" style="margin-top:32px;">Analysis of Competing Hypotheses — H1–H4</div>`;
   html += `<div class="ach-grid">`;
-  Object.entries(data.ach).forEach(([id, h]) => {
-    html += buildAchCard(id, h);
-  });
+  Object.entries(data.ach).forEach(([id, h]) => { html += buildAchCard(id, h); });
   html += `</div>`;
 
   // Key data points
   html += `<div class="section-heading" style="margin-top:32px;">Key Data Points</div>`;
   html += `<table class="datapoints-table">
     <thead><tr>
-      <th>Indicator / Metric</th>
-      <th>Current Value</th>
-      <th>Context</th>
-    </tr></thead>
-    <tbody>`;
+      <th>Indicator / Metric</th><th>Current Value</th><th>Context &amp; Source</th>
+    </tr></thead><tbody>`;
   data.key_datapoints.forEach(dp => { html += buildDpRow(dp); });
   html += `</tbody></table>`;
 
+  // Version history
+  if (data.version_history && data.version_history.length) {
+    html += `<div class="section-heading" style="margin-top:32px;">Version History — Indicator Snapshot Log</div>`;
+    html += `<table class="version-table">
+      <thead><tr>
+        <th>Date</th><th>Version</th><th>I1</th><th>I2</th><th>I3</th><th>I4</th><th>I5</th><th>I6</th><th>Triggered</th><th>Note</th>
+      </tr></thead><tbody>`;
+    data.version_history.forEach(v => { html += buildVersionRow(v); });
+    html += `</tbody></table>`;
+  }
+
   main.innerHTML = html;
 
-  // Epistemic footer
-  const footer = document.getElementById('epistemic-footer');
-  footer.innerHTML = `<strong>Epistemic note:</strong> ${data.epistemic_note}`;
-  footer.style.display = 'block';
+  // Render charts after DOM is populated
+  setTimeout(renderCharts, 50);
 }
 
 render();
 
-function toggleExplainer() {
-  const btn   = document.getElementById('explainer-btn');
-  const panel = document.getElementById('explainer-panel');
+// ── Panel toggles ─────────────────────────────────────────────────────────────
+
+function togglePanel(id) {
+  const panel = document.getElementById(id + '-panel');
+  const arrow = document.getElementById(id + '-arrow');
   const isOpen = panel.classList.contains('open');
   panel.classList.toggle('open', !isOpen);
-  btn.classList.toggle('open', !isOpen);
-  btn.querySelector('.arrow').textContent = isOpen ? '▶' : '▼';
+  arrow.textContent = isOpen ? '▶' : '▼';
 }
 </script>
 </body>
