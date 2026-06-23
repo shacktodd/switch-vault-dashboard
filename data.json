@@ -1,0 +1,127 @@
+{
+  "last_updated": "2026-06-22",
+  "update_note": "Manual baseline — June 22, 2026. Auto-update script will overwrite automatable fields weekly.",
+
+  "indicators": {
+    "I1": {
+      "name": "Coercion-Failure",
+      "label": "Sanctions / Coercion Effectiveness",
+      "status": "TRIGGERED",
+      "summary": "3 of 3 tracked coercion episodes show behavioral non-capitulation",
+      "detail": "Iran: oil exports continue via shadow fleet; DPRK: $577M crypto theft Jan–Apr 2026 (76% of all 2026 global crypto losses); Russia: RBOC operations ongoing despite 2022 asset freeze. Bolton primary source confirms sanctions explicitly substituted for military force as preferred coercive instrument — revealing the threshold problem.",
+      "threshold": "TRIGGER if ≥2 of 3 tracked episodes (Iran, DPRK, Russia) show strategic non-capitulation over trailing 12 months",
+      "disconfirm": "Iran, Russia, or DPRK demonstrably alters core strategic behavior (not tactical compliance) in direct response to economic pressure within a 6-month window",
+      "data_series": "CFR Sanctions Tracker; State Dept OFAC enforcement releases; UN Panel of Experts reports; FinCEN SAR filings",
+      "update_method": "manual",
+      "source_credibility": "DOCUMENTED (Bolton memoir primary source; UN/FinCEN secondary)"
+    },
+    "I2": {
+      "name": "Reserve-Diversification",
+      "label": "USD Reserve Share & Gold Accumulation",
+      "status": "TRIGGERED",
+      "summary": "USD at 56.9% of allocated reserves — sub-57% for first time since 1995; gold exceeds US Treasuries in official reserves",
+      "detail": "IMF COFER Q3 2025: USD 56.9% allocated. ECB June 2026: gold 27% vs Treasuries 22% — first inversion. Central banks purchased ~863t gold in 2025 (4th consecutive year above 850t). Domestic storage share jumped 41%→59% in a single year: France repatriated 129t from NY Fed (completed Apr 2026), India 274t. Bundesbank's 1,236t still at NY Fed under repatriation pressure.",
+      "threshold": "TRIGGER if USD share <60% of allocated reserves AND central-bank gold purchases exceed 500t/year for 2+ consecutive years",
+      "disconfirm": "USD rebounds above 63% of allocated reserves in two consecutive IMF COFER quarters; central-bank gold purchases fall below 400t/year",
+      "data_series": "IMF COFER (quarterly); World Gold Council Central Bank Statistics (monthly); FRED GOLDAMGBD228NLBM; BIS Triennial Survey",
+      "update_method": "auto",
+      "imf_series": "COFER",
+      "fred_series": "GOLDAMGBD228NLBM",
+      "current_usd_pct": 56.9,
+      "current_gold_t_annual": 863,
+      "source_credibility": "DOCUMENTED (IMF COFER primary; World Gold Council corroborated)"
+    },
+    "I3": {
+      "name": "Mineral-Chokepoint",
+      "label": "Rare Earth / Critical Mineral Processing Control",
+      "status": "TRIGGERED",
+      "summary": "China holds ~90% of global rare earth processing; US yttrium imports collapsed 333t→17t (Apr–Dec 2025)",
+      "detail": "China's Oct 2025 rare-earth export controls remain in force through Nov 10, 2026 cliff. Yttrium (aerospace/defense critical) US imports: 333t → 17t in 8 months. Aerospace industry sources confirm rationing of yttrium-stabilized components. No credible substitute processing capacity outside China at scale within 24-month horizon.",
+      "threshold": "TRIGGER if China controls >70% of processing for ≥3 of 6 DoD-designated critical minerals AND has active export controls on ≥1",
+      "disconfirm": "US/allied processing capacity reaches 40%+ of domestic demand for all 6 critical minerals; China lifts controls without extracting strategic concession",
+      "data_series": "USGS Mineral Commodity Summaries (annual); DoD Critical Materials report; Census Bureau IM-145 import statistics",
+      "update_method": "manual",
+      "source_credibility": "DOCUMENTED (USGS primary; DoD corroborated)"
+    },
+    "I4": {
+      "name": "Indigenization",
+      "label": "Domestic Tech Substitution Progress",
+      "status": "PARTIAL",
+      "summary": "HBM (High Bandwidth Memory) bottleneck: China cannot yet substitute advanced memory at scale",
+      "detail": "China has achieved domestic substitution in mature-node logic chips (SMIC 7nm workaround), solar panels, EVs, and telecom equipment. Critical gap: High Bandwidth Memory (HBM2e, HBM3) for AI inference — SK Hynix and Samsung dominate, no Chinese equivalent at volume. This is the primary remaining leverage point in the semiconductor stack. TrendForce estimates 18–36 month lag for Chinese HBM at competitive yield rates.",
+      "threshold": "TRIGGER (full) if China achieves domestic substitution across all 4 tracked technology stacks: logic chips, memory (HBM), EUV alternatives, and advanced packaging",
+      "disconfirm": "Chinese HBM at competitive yield rates within 12 months; US successfully restricts SK Hynix/Samsung sales to China",
+      "data_series": "TrendForce semiconductor reports; SEMI equipment shipment data; BIS Entity List additions; CSET technology tracker",
+      "update_method": "manual",
+      "source_credibility": "DOCUMENTED (TrendForce commercial data); CONTESTED (timeline estimates vary ±12 months)"
+    },
+    "I5": {
+      "name": "Entanglement-Seam",
+      "label": "Corporate / State Entanglement Stress",
+      "status": "WATCH",
+      "summary": "Stress signals present but not at threshold — monitoring SpaceX/Musk principal-capture and hyperscaler capex commitment",
+      "detail": "Key monitored seams: (1) SpaceX principal capture — Musk Tesla China sales -8% YTD, ~85% SpaceX voting control; orbital contest with Guowang/Qianfan constellation accelerating. (2) Hyperscaler capex commitment: ~$725B 2026 total — Google ~$180B, Amazon ~$200B, Microsoft ~$190B, Meta ~$125B — creates sunk-cost lock-in to current geopolitical posture. (3) Deloitte advisory entanglement via China-adjacent consulting revenue. No single seam has crossed the 'force majeure revision' threshold.",
+      "threshold": "TRIGGER if ≥2 Fortune-100 firms publicly revise China strategy citing 'force majeure' or geopolitical risk OR if a principal-capture event produces a documented strategic conflict of interest",
+      "disconfirm": "Hyperscaler capex redirects toward non-China-exposed supply chains; Musk divests Tesla China operations",
+      "data_series": "SEC 10-K risk factor filings; earnings call transcripts; DoD contractor disclosures; SpaceX FCC orbital filings",
+      "update_method": "manual",
+      "source_credibility": "DOCUMENTED (SEC filings); CONTESTED (entanglement scoring is a construct)"
+    },
+    "I6": {
+      "name": "Regionalization",
+      "label": "Alternative Settlement Infrastructure",
+      "status": "TRIGGERED",
+      "summary": "mBridge $55B+ processed; e-CNY $2.3T cumulative; GENIUS Act stablecoins $200B→$309B in 4 months",
+      "detail": "mBridge: $55B+ multi-CBDC cross-border settlements, bypasses SWIFT, smart contracts hard-code capital controls. e-CNY: >$2.3T cumulative transactions, 230M+ wallets; Jan 2026 reclassified from digital cash to regulated deposit liability — significant legal status shift. GENIUS Act (signed Jul 2025): stablecoin market grew $200B→$309B Jul–Nov 2025, ~$109B in T-bill purchases for compliance; Treasury retains freeze/restrict authority — embeds control layer into the 'private' alternative.",
+      "threshold": "TRIGGER if non-SWIFT settlement volume exceeds 5% of global cross-border flows OR if ≥3 G20 members adopt a common non-dollar settlement standard",
+      "disconfirm": "mBridge adoption reverses; e-CNY growth stalls below $3T; GENIUS Act stablecoins fail to displace bank deposits",
+      "data_series": "BIS payment statistics; mBridge public progress reports; PBoC e-CNY white papers; Treasury stablecoin reports",
+      "update_method": "manual",
+      "source_credibility": "DOCUMENTED (BIS, PBoC primary); CONTESTED (mBridge figures self-reported)"
+    }
+  },
+
+  "ach": {
+    "H1": {
+      "name": "Managed Succession — Sino-centric",
+      "probability_range": "15–30%",
+      "direction": "UNLIKELY",
+      "description": "China successfully displaces USD dominance and establishes renminbi as primary reserve currency within 10 years. Requires HBM indigenization completion, sustained Belt-and-Road creditor leverage, and Western alliance fracture."
+    },
+    "H2": {
+      "name": "Bounded Multipolarity",
+      "probability_range": "55–70%",
+      "direction": "BASE CASE",
+      "description": "No single successor. Dollar retains plurality share but loses monopoly. Regional settlement blocs (mBridge, Eurasian, dollar) coexist with persistent friction. Most corporate and state planning should price this as the operating environment."
+    },
+    "H3": {
+      "name": "Persistent US Primacy",
+      "probability_range": "20–35%",
+      "direction": "UNLIKELY",
+      "description": "Dollar share stabilizes above 60%, SWIFT alternatives fail to achieve critical mass, US tech controls successfully retard Chinese indigenization. Requires I3 and I6 to reverse — currently both triggered."
+    },
+    "H4": {
+      "name": "Disorderly Restructuring",
+      "probability_range": "30–45%",
+      "direction": "TAIL OVERLAY",
+      "description": "Not mutually exclusive with H1/H2/H3 — this is a process overlay. A disorderly transition episode (sovereign debt cascade, Taiwan contingency, dollar liquidity crisis) interrupts any of the above trajectories. Elevated by I1 trigger (coercion-failure increases miscalculation risk)."
+    }
+  },
+
+  "key_datapoints": [
+    {"label": "USD share of allocated reserves", "value": "56.9%", "note": "Sub-57% first time since 1995 (IMF COFER Q3 2025)", "status": "watch"},
+    {"label": "Central bank gold purchases (2025)", "value": "~863t", "note": "4th consecutive year above 850t threshold", "status": "triggered"},
+    {"label": "Gold vs US Treasuries in official reserves", "value": "27% vs 22%", "note": "First inversion on record (ECB June 2026)", "status": "triggered"},
+    {"label": "e-CNY cumulative transactions", "value": ">$2.3T", "note": "230M+ wallets; reclassified as deposit liability Jan 2026", "status": "triggered"},
+    {"label": "mBridge settlement volume", "value": "$55B+", "note": "Multi-CBDC; bypasses SWIFT rails", "status": "triggered"},
+    {"label": "DPRK crypto theft (Jan–Apr 2026)", "value": "$577M", "note": "76% of all 2026 global crypto-hack losses", "status": "triggered"},
+    {"label": "US yttrium imports (Apr–Dec 2025)", "value": "333t → 17t", "note": "94.9% collapse; aerospace rationing confirmed", "status": "triggered"},
+    {"label": "China rare-earth processing share", "value": "~90%", "note": "Export controls active through Nov 10, 2026", "status": "triggered"},
+    {"label": "GENIUS Act stablecoin market growth", "value": "$200B → $309B", "note": "Jul–Nov 2025; ~$109B in T-bill compliance purchases", "status": "watch"},
+    {"label": "Hyperscaler 2026 capex (combined)", "value": "~$725B", "note": "Google ~$180B, Amazon ~$200B, Microsoft ~$190B, Meta ~$125B", "status": "watch"},
+    {"label": "Ukraine reconstruction estimate", "value": "~$588B", "note": "World Bank RDNA5, Feb 2026; ~3× Ukraine GDP", "status": "watch"},
+    {"label": "Chinese underground banking (FinCEN)", "value": "$1.4B", "note": "Suspicious fentanyl-related BSA filings 2025; Zhang network: 170+ accounts, 150+ companies", "status": "triggered"}
+  ],
+
+  "epistemic_note": "All probability ranges are analytical constructs, not measurements. TRIGGERED/PARTIAL/WATCH designations reflect threshold crossings against named data series — not predictive claims. This analysis is not investment advice. Claims labeled DOCUMENTED reflect primary/secondary source corroboration; CONTESTED reflects genuine scholarly disagreement; SPECULATIVE reflects framework extrapolation beyond available data."
+}

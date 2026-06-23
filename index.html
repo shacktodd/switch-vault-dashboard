@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Switch & The Vault — Strategic Depth Board</title>
+  <style>
+    :root {
+      --bg:         #0d1117;
+      --surface:    #161b22;
+      --surface2:   #21262d;
+      --border:     #30363d;
+      --text:       #e6edf3;
+      --muted:      #8b949e;
+      --triggered:  #f85149;
+      --triggered-bg: rgba(248,81,73,0.12);
+      --partial:    #d29922;
+      --partial-bg: rgba(210,153,34,0.12);
+      --watch:      #388bfd;
+      --watch-bg:   rgba(56,139,253,0.12);
+      --accent:     #58a6ff;
+      --base-case:  #3fb950;
+      --base-bg:    rgba(63,185,80,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* ── Header ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .header-left h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .header-left .subtitle {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .header-right {
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .header-right .updated {
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    /* ── Board summary bar ── */
+    .summary-bar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 32px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .summary-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .chip-triggered { background: var(--triggered-bg); color: var(--triggered); border: 1px solid var(--triggered); }
+    .chip-partial   { background: var(--partial-bg);   color: var(--partial);   border: 1px solid var(--partial); }
+    .chip-watch     { background: var(--watch-bg);     color: var(--watch);     border: 1px solid var(--watch); }
+
+    /* ── Main layout ── */
+    main { padding: 24px 32px; max-width: 1400px; }
+
+    /* ── Section headings ── */
+    .section-heading {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      margin-top: 28px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Indicator cards grid ── */
+    .indicators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 14px;
+    }
+    .indicator-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      position: relative;
+    }
+    .indicator-card.triggered { border-left: 3px solid var(--triggered); }
+    .indicator-card.partial   { border-left: 3px solid var(--partial); }
+    .indicator-card.watch     { border-left: 3px solid var(--watch); }
+
+    .indicator-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .indicator-id {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .indicator-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .status-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+    .badge-triggered { background: var(--triggered-bg); color: var(--triggered); }
+    .badge-partial   { background: var(--partial-bg);   color: var(--partial); }
+    .badge-watch     { background: var(--watch-bg);     color: var(--watch); }
+
+    .indicator-summary {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+    .indicator-detail {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    .meta-item {
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .meta-item strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+    .meta-item.cred {
+      color: var(--accent);
+      font-size: 10px;
+    }
+
+    /* expandable detail */
+    details summary {
+      cursor: pointer;
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 4px;
+      user-select: none;
+      list-style: none;
+    }
+    details summary::before { content: '▸ '; }
+    details[open] summary::before { content: '▾ '; }
+    details .expand-content {
+      background: var(--surface2);
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    details .expand-content .label {
+      font-weight: 600;
+      color: var(--text);
+      display: block;
+      margin-bottom: 2px;
+      margin-top: 6px;
+    }
+    details .expand-content .label:first-child { margin-top: 0; }
+
+    /* ── ACH Table ── */
+    .ach-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+    }
+    .ach-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .ach-card.base { border-left: 3px solid var(--base-case); }
+    .ach-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+    .ach-id { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .ach-name { font-size: 13px; font-weight: 600; color: var(--text); margin: 2px 0 6px; }
+    .prob-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .prob-unlikely  { background: rgba(139,148,158,0.15); color: var(--muted); }
+    .prob-base      { background: var(--base-bg);         color: var(--base-case); }
+    .prob-tail      { background: rgba(210,153,34,0.12);  color: var(--partial); }
+    .ach-desc { font-size: 12px; color: var(--muted); }
+
+    /* ── Key data points ── */
+    .datapoints-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .datapoints-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .datapoints-table td {
+      padding: 8px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .datapoints-table tr:last-child td { border-bottom: none; }
+    .datapoints-table tr:hover td { background: var(--surface2); }
+    .dp-value { font-weight: 600; font-family: monospace; font-size: 13px; }
+    .dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+    .dot-triggered { background: var(--triggered); }
+    .dot-watch     { background: var(--watch); }
+    .dp-note { color: var(--muted); font-size: 12px; }
+
+    /* ── Footer / Epistemic note ── */
+    footer {
+      margin: 32px 32px 24px;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+    footer strong { color: var(--text); }
+
+    /* ── Loading/error ── */
+    #loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 300px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>The Switch &amp; The Vault — Strategic Depth Board</h1>
+    <div class="subtitle">I1–I6 Indicator Board · ACH Probability Matrix · Key Data Points</div>
+  </div>
+  <div class="header-right">
+    <div>Last updated</div>
+    <div class="updated" id="last-updated">—</div>
+    <div style="margin-top:4px;" id="update-note"></div>
+  </div>
+</header>
+
+<div class="summary-bar" id="summary-bar">
+  <span class="summary-chip chip-triggered" id="chip-triggered">● — TRIGGERED</span>
+  <span class="summary-chip chip-partial"   id="chip-partial">◐ — PARTIAL</span>
+  <span class="summary-chip chip-watch"     id="chip-watch">○ — WATCH</span>
+</div>
+
+<main id="loading">Loading board data…</main>
+
+<footer id="epistemic-footer" style="display:none;"></footer>
+
+<script>
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+function statusClass(s) {
+  return s === 'TRIGGERED' ? 'triggered' : s === 'PARTIAL' ? 'partial' : 'watch';
+}
+function badgeClass(s) {
+  return s === 'TRIGGERED' ? 'badge-triggered' : s === 'PARTIAL' ? 'badge-partial' : 'badge-watch';
+}
+
+// ── Indicator card builder ─────────────────────────────────────────────────
+
+function buildIndicatorCard(id, ind) {
+  const sc = statusClass(ind.status);
+  return `
+    <div class="indicator-card ${sc}">
+      <div class="indicator-header">
+        <div>
+          <div class="indicator-id">${id} · ${ind.name}</div>
+          <div class="indicator-name">${ind.label}</div>
+        </div>
+        <span class="status-badge ${badgeClass(ind.status)}">${ind.status}</span>
+      </div>
+      <div class="indicator-summary">${ind.summary}</div>
+      <div class="indicator-detail">${ind.detail}</div>
+      <details>
+        <summary>Threshold · Falsifier · Data series</summary>
+        <div class="expand-content">
+          <span class="label">Trigger threshold</span>${ind.threshold}
+          <span class="label">Disconfirm condition</span>${ind.disconfirm}
+          <span class="label">Data series</span>${ind.data_series}
+          <span class="label">Update method</span>${ind.update_method === 'auto' ? '⚡ Auto-fetched by update script' : '✎ Manual override required'}
+        </div>
+      </details>
+      <div class="meta-row">
+        <div class="meta-item cred">${ind.source_credibility}</div>
+      </div>
+    </div>`;
+}
+
+// ── ACH card builder ───────────────────────────────────────────────────────
+
+function probClass(dir) {
+  if (dir === 'BASE CASE') return 'prob-base';
+  if (dir === 'TAIL OVERLAY') return 'prob-tail';
+  return 'prob-unlikely';
+}
+
+function buildAchCard(id, h) {
+  const isBase = h.direction === 'BASE CASE';
+  return `
+    <div class="ach-card ${isBase ? 'base' : ''}">
+      <div class="ach-header">
+        <div>
+          <div class="ach-id">${id}</div>
+          <div class="ach-name">${h.name}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          <span class="prob-badge ${probClass(h.direction)}">${h.probability_range}</span>
+          <span style="font-size:10px;color:var(--muted);">${h.direction}</span>
+        </div>
+      </div>
+      <div class="ach-desc">${h.description}</div>
+    </div>`;
+}
+
+// ── Data point row builder ─────────────────────────────────────────────────
+
+function buildDpRow(dp) {
+  const dotCls = dp.status === 'triggered' ? 'dot-triggered' : 'dot-watch';
+  return `
+    <tr>
+      <td><span class="dot ${dotCls}"></span>${dp.label}</td>
+      <td><span class="dp-value">${dp.value}</span></td>
+      <td class="dp-note">${dp.note}</td>
+    </tr>`;
+}
+
+// ── Main render ────────────────────────────────────────────────────────────
+
+async function render() {
+  let data;
+  try {
+    const resp = await fetch('data.json?_=' + Date.now());
+    data = await resp.json();
+  } catch (e) {
+    document.getElementById('loading').innerHTML =
+      '<span style="color:var(--triggered)">⚠ Could not load data.json — make sure it is in the same folder as index.html.</span>';
+    return;
+  }
+
+  // Header
+  document.getElementById('last-updated').textContent = data.last_updated || '—';
+  if (data.update_note) {
+    document.getElementById('update-note').textContent = data.update_note;
+  }
+
+  // Summary bar counts
+  const indicators = data.indicators;
+  const counts = { TRIGGERED: 0, PARTIAL: 0, WATCH: 0 };
+  Object.values(indicators).forEach(i => counts[i.status] = (counts[i.status] || 0) + 1);
+  document.getElementById('chip-triggered').textContent = `● ${counts.TRIGGERED} TRIGGERED`;
+  document.getElementById('chip-partial').textContent   = `◐ ${counts.PARTIAL} PARTIAL`;
+  document.getElementById('chip-watch').textContent     = `○ ${counts.WATCH} WATCH`;
+
+  // Build main content
+  const main = document.getElementById('loading');
+  main.id = 'main-content';
+  main.removeAttribute('style');
+
+  // Indicator grid
+  let html = `<div class="section-heading">Indicator Board — I1–I6</div>`;
+  html += `<div class="indicators-grid">`;
+  Object.entries(indicators).forEach(([id, ind]) => {
+    html += buildIndicatorCard(id, ind);
+  });
+  html += `</div>`;
+
+  // ACH table
+  html += `<div class="section-heading" style="margin-top:32px;">Analysis of Competing Hypotheses — H1–H4</div>`;
+  html += `<div class="ach-grid">`;
+  Object.entries(data.ach).forEach(([id, h]) => {
+    html += buildAchCard(id, h);
+  });
+  html += `</div>`;
+
+  // Key data points
+  html += `<div class="section-heading" style="margin-top:32px;">Key Data Points</div>`;
+  html += `<table class="datapoints-table">
+    <thead><tr>
+      <th>Indicator / Metric</th>
+      <th>Current Value</th>
+      <th>Context</th>
+    </tr></thead>
+    <tbody>`;
+  data.key_datapoints.forEach(dp => { html += buildDpRow(dp); });
+  html += `</tbody></table>`;
+
+  main.innerHTML = html;
+
+  // Epistemic footer
+  const footer = document.getElementById('epistemic-footer');
+  footer.innerHTML = `<strong>Epistemic note:</strong> ${data.epistemic_note}`;
+  footer.style.display = 'block';
+}
+
+render();
+</script>
+</body>
+</html>

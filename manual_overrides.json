@@ -1,0 +1,28 @@
+{
+  "_instructions": "Edit this file to update manual indicators. Commit and push to trigger dashboard update. Only include fields you want to change — everything else in data.json is preserved.",
+  "I1": {
+    "status": "TRIGGERED",
+    "summary": "3 of 3 tracked coercion episodes show behavioral non-capitulation",
+    "last_reviewed": "2026-06-22"
+  },
+  "I3": {
+    "status": "TRIGGERED",
+    "summary": "China holds ~90% of global rare earth processing; US yttrium imports collapsed 333t→17t (Apr–Dec 2025)",
+    "last_reviewed": "2026-06-22"
+  },
+  "I4": {
+    "status": "PARTIAL",
+    "summary": "HBM (High Bandwidth Memory) bottleneck: China cannot yet substitute advanced memory at scale",
+    "last_reviewed": "2026-06-22"
+  },
+  "I5": {
+    "status": "WATCH",
+    "summary": "Stress signals present but not at threshold — monitoring SpaceX/Musk principal-capture and hyperscaler capex commitment",
+    "last_reviewed": "2026-06-22"
+  },
+  "I6": {
+    "status": "TRIGGERED",
+    "summary": "mBridge $55B+ processed; e-CNY $2.3T cumulative; GENIUS Act stablecoins $200B→$309B in 4 months",
+    "last_reviewed": "2026-06-22"
+  }
+}
