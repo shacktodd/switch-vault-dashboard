@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-08-10",
-  "update_note": "Auto-updated 2026-08-10 11:06 UTC via GitHub Actions",
+  "last_updated": "2026-08-17",
+  "update_note": "Auto-updated 2026-08-17 10:29 UTC via GitHub Actions",
   "indicators": {
     "I1": {
       "name": "Coercion-Failure",
